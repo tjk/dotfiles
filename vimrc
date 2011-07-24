@@ -1,4 +1,12 @@
 " == TJ's vimrc ==========================================================
+" -- Bootstrap + pathogen ------------------------------------------------
+let g:CSApprox_verbose_level=0
+filetype off
+if has('gui_running')
+  set t_Co=256
+endif
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
 " -- Basic stuff ---------------------------------------------------------
 set nocompatible                "don't emulate vi's limitations
 syntax on
