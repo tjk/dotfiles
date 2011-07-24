@@ -18,20 +18,35 @@ set guioptions-=T               "turn off needless toolbar on gvim/mvim
 set showmatch                   "shows brace pairs
 set matchpairs+=<:>             "match < and > as well
 set dict=/usr/share/dict/words
-" -- Filetype specifics --------------------------------------------------
-filetype on
-filetype plugin on
-filetype indent on
-  " --  PIG -------------------- requires ~/.vim/syntax/pig.vim, etc -----
-  if has('autocmd')
-    au BufNewFile,BufRead *.pig set filetype=pig syntax=pig
-  endif
 " -- Indentation ---------------------------------------------------------
 set tw=500 sw=2 sts=2
 set expandtab
 set smarttab                    "intelligent tab + backspace
 set autoindent                  "use current indent level for next line
 set smartindent                 "intelligent guess at next line's indent
+" -- Filetype specifics --------------------------------------------------
+filetype on
+filetype plugin on
+filetype indent on
+  if has('autocmd')
+  " -- PIG -------------------- requires ~/.vim/syntax/pig.vim, etc ------
+    au BufNewFile,BufRead *.pig set filetype=pig syntax=pig
+  " -- C + PYTHON --------------------------------------------------------
+    au BufNewFile,BufRead *.py,*.pyw,*.c,*.h set sw=4 sts=4 ts=4
+    au BufNewFile,BufRead *.py,*.pyw,*.c,*.h set ff=unix tw=79
+  " -- Makefile ----------------------------------------------------------
+    au BufRead,BufNewFile Makefile* set noexpandtab
+  endif
+" -- Offscren scrolling --------------------------------------------------
+set scrolloff=3
+set sidescrolloff=7
+set sidescroll=1
+" -- Marking bad whitespace ----------------------------------------------
+highlight BadWhitespace ctermbg=red guibg=red
+if has('autocmd')
+  au BufNewFile,BufRead *.py,*.pyw match BadWhitespace /^\t\+/
+  au BufNewFile,BufRead *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+endif
 " -- Searching -----------------------------------------------------------
 set incsearch                   "find the next match as we type the search
 set ignorecase
@@ -50,6 +65,7 @@ set wildignore=*.o,*.obj,*~     "stuff to ignore when tab completing
 set statusline=%f               "tail of the filename
   " -- Git ---------------------------------------------------------------
   set statusline+=[%{GitBranch()}]
+  set formatoptions-=o          "dont continue comments when pushing o/O
   " -- rvm ---------------------------------------------------------------
   set statusline+=%{exists('g:loaded_rvm')?rvm#statusline():''}
   " ----------------------------------------------------------------------
@@ -64,6 +80,7 @@ map  <C-j> <C-w>j               "down  window
 map  <C-k> <C-w>k               "up    window
 map  <C-l> <C-w>l               "right window
 nmap <C-s> :w<CR>               "save file
+nnoremap Y y$                   "make y behave similarly to d or c
 " -- Plugins -------------------------------------------------------------
   " -- NERDTree ----------------------------------------------------------
   let NERDTreeWinPos="left"
@@ -96,31 +113,3 @@ if has('autocmd')
 endif
 " ------------------------------------------------------------------------
 " == Last updated: July 23, 2011 =========================================
-
-"--- set python (and c) settings ---
-au BufRead,BufNewFile *.py,*.pyw set shiftwidth=4 softtabstop=4 tabstop=4
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix tw=79
-" bad whitespace
-highlight BadWhitespace ctermbg=red guibg=red
-" display tabs at the beginning of a line in Python mode as bad
-au BufRead,BufNewFile *.py,*.pyw match BadWhitespace /^\t\+/
-" make trailing whitespace be flagged as bad
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-
-"set Makefile not to expand tabs to spaces
-au BufRead,BufNewFile Makefile* set noexpandtab
-
-set formatoptions-=o "dont continue comments when pushing o/O
-
-"vertical/horizontal scroll off settings
-set scrolloff=3
-set sidescrolloff=7
-set sidescroll=1
-
-"hide buffers when not displayed
-set hidden
-
-"make Y consistent with C and D
-nnoremap Y y$
-
-
