@@ -4,9 +4,11 @@ let g:CSApprox_verbose_level=0
 filetype off
 if has('gui_running')
   set t_Co=256
+  let g:solarized_termcolors=256
 endif
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
+colorscheme solarized
 " -- Basic stuff ---------------------------------------------------------
 set nocompatible                "don't emulate vi's limitations
 syntax on
@@ -68,8 +70,8 @@ set nofoldenable                "dont fold by default
 set showcmd                     "show incomplete cmds down the bottom
 set cmdheight=2
 set showmode                    "show mode all the time
-set wildmode=list:longest       "cmdline tab completion similar to bash
 set wildmenu                    "ctrl-n and ctrl-p to scroll thru matches
+set wildmode=list:longest       "cmdline tab completion similar to bash
 set wildignore=*.o,*.obj,*~     "stuff to ignore when tab completing
 set statusline=%f               "tail of the filename
   " -- Git ---------------------------------------------------------------
