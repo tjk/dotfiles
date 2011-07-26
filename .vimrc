@@ -2,13 +2,14 @@
 " -- Bootstrap + pathogen ------------------------------------------------
 let g:CSApprox_verbose_level=0
 filetype off
+set t_Co=256
+set bg=dark
+colorscheme solarized
 if has('gui_running')
-  set t_Co=256
   let g:solarized_termcolors=256
 endif
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
-colorscheme solarized
 " -- Basic stuff ---------------------------------------------------------
 set nocompatible                "don't emulate vi's limitations
 syntax on
