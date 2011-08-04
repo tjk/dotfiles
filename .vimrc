@@ -1,6 +1,7 @@
 " == TJ's vimrc ==========================================================
 " -- Bootstrap + pathogen ------------------------------------------------
 let g:CSApprox_verbose_level=0
+filetype on
 filetype off
 set t_Co=256
 set bg=dark
