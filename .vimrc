@@ -4,14 +4,16 @@ set nocompatible                "don't emulate vi's limitations
 let g:CSApprox_verbose_level=0
 filetype on
 filetype off
+call pathogen#helptags()
+call pathogen#runtime_append_all_bundles()
+" -- UI stuff ------------------------------------------------------------
+" (this section needs work)
 set t_Co=256
 set bg=dark
 colorscheme solarized
 if has('gui_running')
   let g:solarized_termcolors=256
 endif
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
 " -- Basic stuff ---------------------------------------------------------
 syntax on
 let mapleader=','               "use , rather than default \ as leader
@@ -19,12 +21,16 @@ set modelines=0                 "http://www.guninski.com/vim1.html
 set number                      "add line numbers
 set autoread                    "watch for file changes
 set cursorline
+set mouse=a                     "enable mouse if possible
 set hidden                      "hide buffers
+set title                       "let vim change terminal window's title
 set ruler                       "show current cursor position
 set linebreak
 set vb t_vb=                    "disable visual bell
+set noerrorbells
 set backspace=indent,eol,start  "backspace between lines, etc
 set history=1000                "how big the history buffer should be
+set undolevels=1000             "how big the undo buffer should be
 set wrap linebreak nolist
 set showbreak=...
 set guioptions-=T               "turn off needless toolbar on gvim/mvim
@@ -63,7 +69,7 @@ endif
 " -- Searching -----------------------------------------------------------
 set incsearch                   "find the next match as we type the search
 set ignorecase
-set nohls                       "don't hilight search results
+set hls                         "hilight search results
 " -- Folding -------------------------------------------------------------
 set foldmethod=indent           "fold based on indent
 set foldnestmax=3               "deepest fold is 3 levels
@@ -88,12 +94,18 @@ set statusline+=%l/%L           "cursor line/total lines
 set statusline+=\ %P            "percent through file
 set laststatus=2
 " -- Key mappings --------------------------------------------------------
-map  <C-h> <C-w>h               "left  window
-map  <C-j> <C-w>j               "down  window
-map  <C-k> <C-w>k               "up    window
-map  <C-l> <C-w>l               "right window
-nmap <C-s> :w<CR>               "save file
-nnoremap Y y$                   "make y behave similarly to d or c
+nnoremap ; :
+nnoremap Y y$
+nnoremap j gj
+nnoremap k gk
+map  <C-h> <C-w>h
+map  <C-j> <C-w>j
+map  <C-k> <C-w>k
+map  <C-l> <C-w>l
+nmap <C-s> :w<CR>
+nmap <silent> ,/ :nohls<CR>
+set pastetoggle=<F2>            "don't do smart stuff when pasting buffer
+cmap w!! w !sudo tee % > /dev/null
 " -- Plugins -------------------------------------------------------------
   " -- NERDTree ----------------------------------------------------------
   let NERDTreeWinPos="left"
