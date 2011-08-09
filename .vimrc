@@ -1,5 +1,6 @@
 " == TJ's vimrc ==========================================================
 " -- Bootstrap + pathogen ------------------------------------------------
+set nocompatible                "don't emulate vi's limitations
 let g:CSApprox_verbose_level=0
 filetype on
 filetype off
@@ -12,7 +13,6 @@ endif
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 " -- Basic stuff ---------------------------------------------------------
-set nocompatible                "don't emulate vi's limitations
 syntax on
 let mapleader=','               "use , rather than default \ as leader
 set modelines=0                 "http://www.guninski.com/vim1.html
