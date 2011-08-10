@@ -18,7 +18,7 @@ endif
 syntax on
 let mapleader=','               "use , rather than default \ as leader
 set modelines=0                 "http://www.guninski.com/vim1.html
-set number                      "add line numbers
+set nu                          "add line numbers
 set autoread                    "watch for file changes
 set cursorline
 set mouse=a                     "enable mouse if possible
@@ -29,6 +29,7 @@ set linebreak
 set vb t_vb=                    "disable visual bell
 set noerrorbells
 set backspace=indent,eol,start  "backspace between lines, etc
+set whichwrap=b,s,h,l,<,>,[,]   "backspace && cursor keys wrap too
 set history=1000                "how big the history buffer should be
 set undolevels=1000             "how big the undo buffer should be
 set wrap linebreak nolist
@@ -95,6 +96,10 @@ set statusline+=\ %P            "percent through file
 set laststatus=2
 " -- Key mappings --------------------------------------------------------
 nnoremap ; :
+cmap W w
+cmap WQ wq
+cmap wQ wq
+cmap Q q
 nnoremap Y y$
 nnoremap j gj
 nnoremap k gk
