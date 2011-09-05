@@ -14,4 +14,4 @@ Move the configuration files to your home directory
  
     $ cd dotfiles
     $ cp .* ~
-    $ cp vimfiles ~/.vim
+    $ cp -r vimfiles ~/.vim
