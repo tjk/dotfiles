@@ -1,0 +1,26 @@
+[alias]
+  st = status
+  co = checkout
+  mrg = merge --no-ff --no-commit
+[user]
+  name = TJ Koblentz
+  email = tj.koblentz@gmail.com
+[core]
+  editor = /usr/bin/vim
+[push]
+  default = current
+[color]
+  ui = auto
+  [color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+  [color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+  [color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
