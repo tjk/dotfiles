@@ -1,6 +1,8 @@
 README
 ======
 
+! -- Don't use my gitconfig. :)
+
 Clone the repository (and submodules)
 -----------------------------------
 
