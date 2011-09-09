@@ -115,6 +115,7 @@ cmap w!! w !sudo tee % > /dev/null
   " -- NERDTree ----------------------------------------------------------
   let NERDTreeWinPos="left"
   let NERDTreeWinSize=35
+  let NERDTreeIgnore=['\.pyc$']
   silent! nmap <silent> <Leader>p :NERDTreeToggle<CR>
 " -- Autocmd functions ---------------------------------------------------
 if has('autocmd')
