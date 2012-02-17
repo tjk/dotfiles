@@ -19,6 +19,7 @@ call vundle#rc()
     silent! nmap <silent> <Leader>p :NERDTreeToggle<CR>
   Bundle 'Lokaltog/vim-powerline'
     let g:Powerline_symbols = 'fancy'
+  Bundle 'ervandew/supertab'
   " -- from vimscripts ---------------------------------------------------
   Bundle 'L9'
   Bundle 'FuzzyFinder'
@@ -132,7 +133,7 @@ map  <C-j> <C-w>j
 map  <C-k> <C-w>k
 map  <C-l> <C-w>l
 nmap <C-s> :w<CR>
-nmap <silent> <Leader>/ :nohls<CR>     "toggle highlightin
+nmap <silent> <Leader>/ :nohls<CR>     "toggle highlighting -- TODO fix
 set pastetoggle=<F2>                   "for pasting into vim
 cmap w!! w !sudo tee % > /dev/null     "force save when opened while !root
 " -- Autocmd functions ---------------------------------------------------
