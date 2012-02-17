@@ -2,6 +2,7 @@
 " -- Bootstrap -----------------------------------------------------------
 set nocompatible                "don't emulate vi's limitations
 filetype off                    "required
+let mapleader=','               "use , rather than default \ as leader
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
   " -- Bundles -----------------------------------------------------------
@@ -10,6 +11,10 @@ call vundle#rc()
   " -- from github -------------------------------------------------------
   Bundle 'gmarik/vundle'
   Bundle 'scrooloose/nerdtree'
+    let NERDTreeWinPos="left"
+    let NERDTreeWinSize=35
+    let NERDTreeIgnore=['\.pyc$']
+    silent! nmap <silent> <Leader>p :NERDTreeToggle<CR>
   Bundle 'Lokaltog/vim-powerline'
     let g:Powerline_symbols = 'fancy'
   " -- from vimscripts ---------------------------------------------------
@@ -28,7 +33,6 @@ filetype plugin indent on       "required
 " endif
 " -- Basic stuff ---------------------------------------------------------
 syntax on
-let mapleader=','               "use , rather than default \ as leader
 set modelines=0                 "http://www.guninski.com/vim1.html
 set rnu                         "add relative line numbers
 set autoread                    "watch for file changes
@@ -129,12 +133,6 @@ nmap <C-s> :w<CR>
 nmap <silent> ,/ :nohls<CR>
 set pastetoggle=<F2>            "don't do smart stuff when pasting buffer
 cmap w!! w !sudo tee % > /dev/null
-" -- Plugins -------------------------------------------------------------
-  " -- NERDTree ----------------------------------------------------------
-  let NERDTreeWinPos="left"
-  let NERDTreeWinSize=35
-  let NERDTreeIgnore=['\.pyc$']
-  silent! nmap <silent> <Leader>p :NERDTreeToggle<CR>
 " -- Autocmd functions ---------------------------------------------------
 if has('autocmd')
   au BufReadPost * call SetCursorPosition()
