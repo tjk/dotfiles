@@ -127,14 +127,14 @@ cmap Q q
 nnoremap Y y$
 nnoremap j gj
 nnoremap k gk
-map  <C-h> <C-w>h
+map  <C-h> <C-w>h                      "make moving around splits faster
 map  <C-j> <C-w>j
 map  <C-k> <C-w>k
 map  <C-l> <C-w>l
 nmap <C-s> :w<CR>
-nmap <silent> ,/ :nohls<CR>
-set pastetoggle=<F2>            "don't do smart stuff when pasting buffer
-cmap w!! w !sudo tee % > /dev/null
+nmap <silent> <Leader>/ :nohls<CR>     "toggle highlightin
+set pastetoggle=<F2>                   "for pasting into vim
+cmap w!! w !sudo tee % > /dev/null     "force save when opened while !root
 " -- Autocmd functions ---------------------------------------------------
 if has('autocmd')
   au BufReadPost * call SetCursorPosition()
