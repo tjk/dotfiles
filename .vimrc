@@ -134,6 +134,7 @@ map  <C-k> <C-w>k
 map  <C-l> <C-w>l
 nmap <C-s> :w<CR>
 nmap <silent> <Leader>/ :nohls<CR>     "toggle highlighting -- TODO fix
+nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
 set pastetoggle=<F2>                   "for pasting into vim
 cmap w!! w !sudo tee % > /dev/null     "force save when opened while !root
 " -- Autocmd functions ---------------------------------------------------
