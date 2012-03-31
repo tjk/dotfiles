@@ -3,8 +3,8 @@
 set nocompatible                "don't emulate vi's limitations
 filetype off                    "required
 let mapleader=','               "use , rather than default \ as leader
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/vundle/  "add to vim runtime path
+call vundle#rc()                "sets up vundle for bundle management
   " -- Bundles -----------------------------------------------------------
   " >> set the bundles up by running the following two commands in shell
   " $ git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
@@ -20,20 +20,18 @@ call vundle#rc()
   Bundle 'Lokaltog/vim-powerline'
     let g:Powerline_symbols = 'fancy'
   Bundle 'ervandew/supertab'
+  Bundle 'mattn/zencoding-vim'
+  Bundle 'tpope/vim-rails'
+    command! -bar -nargs=1 OpenURL :!chromium <args>
+  Bundle 'altercation/vim-colors-solarized'
+    set background=dark
+    colorscheme solarized
   " -- from vimscripts ---------------------------------------------------
   Bundle 'L9'
   Bundle 'FuzzyFinder'
     highlight Pmenu guifg=whie guibg=blue ctermfg=white ctermbg=blue
   " -- finished bundle bootstrapping -------------------------------------
 filetype plugin indent on       "required
-" -- UI stuff ------------------------------------------------------------
-" (this section needs work)
-" set t_Co=256
-" set bg=dark
-" colorscheme solarized
-" if has('gui_running')
-"   let g:solarized_termcolors=256
-" endif
 " -- Basic stuff ---------------------------------------------------------
 syntax on
 set modelines=0                 "http://www.guninski.com/vim1.html
@@ -83,7 +81,7 @@ set smartindent                 "intelligent guess at next line's indent
     au BufNewFile,BufRead *.npc set ff=unix
   endif
 " -- Offscren scrolling --------------------------------------------------
-set scrolloff=3
+set scrolloff=1
 set sidescrolloff=7
 set sidescroll=1
 " -- Marking bad whitespace ----------------------------------------------
@@ -120,6 +118,7 @@ set statusline+=%l/%L           "cursor line/total lines
 set statusline+=\ %P            "percent through file
 set laststatus=2
 " -- Key mappings --------------------------------------------------------
+"" careful about comments in this section as they mess up map commands
 nnoremap ; :
 cmap W w
 cmap WQ wq
@@ -128,14 +127,17 @@ cmap Q q
 nnoremap Y y$
 nnoremap j gj
 nnoremap k gk
-map  <C-h> <C-w>h                      "make moving around splits faster
+map  <C-h> <C-w>h
 map  <C-j> <C-w>j
 map  <C-k> <C-w>k
 map  <C-l> <C-w>l
 nmap <C-s> :w<CR>
-nmap <silent> <Leader>/ :nohls<CR>     "toggle highlighting -- TODO fix
 nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
+noremap <silent> <leader>/ :silent nohls<CR>
 set pastetoggle=<F2>                   "for pasting into vim
+:map <F7> :w !xclip<CR><CR>
+:vmap <F7> "*y
+:map <S-F7> :r!xclip -o<CR>
 cmap w!! w !sudo tee % > /dev/null     "force save when opened while !root
 " -- Autocmd functions ---------------------------------------------------
 if has('autocmd')
@@ -149,6 +151,7 @@ if has('autocmd')
     end
   endfunction
 " ------------------------------------------------------------------------
+  "" TODO map this -- don't want to mess up other people's style
   au BufWritePre * :call <SID>StripTrailingWhitespaces()
   function! <SID>StripTrailingWhitespaces()
     " Preparation: save last search, and cursor position.
