@@ -1,5 +1,4 @@
 alias vi='vim -c ":cd %:p:h"'
-alias ls='/usr/bin/vendor_perl/ls++'
 alias rm='nocorrect rm'
 alias mv='nocorrect mv'
 alias cp='nocorrect cp'
@@ -11,6 +10,10 @@ alias zathura='zathura 2&> /dev/null &'
 alias g='git'
 alias y='yaourt'
 alias mpc='ncmpc -c -m -S'
+
+alias pianobar='/home/tj/system/pianobar'
+alias ls='/usr/bin/vendor_perl/ls++'
+alias record='ffmpeg -ar 44100 -ac 1 -f alsa -i pulse -f s161e -f x11grab -r 30 -s 1280x720 -i :0+158,93 -vcodec flashsv screengrab.flv'
 
 alias msfconsole='/opt/metasploit/msfconsole'
 alias msfpayload='/opt/metasploit/msfpayload'

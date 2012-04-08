@@ -26,6 +26,9 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'altercation/vim-colors-solarized'
     set background=dark
     colorscheme solarized
+    command! Dark :set background=dark | colorscheme solarized
+    command! Light :set background=light | colorscheme solarized
+  Bundle 'tpope/vim-surround'
   " -- from vimscripts ---------------------------------------------------
   Bundle 'L9'
   Bundle 'FuzzyFinder'
@@ -71,7 +74,7 @@ set smartindent                 "intelligent guess at next line's indent
 " -- Filetype specifics --------------------------------------------------
   if has('autocmd')
   " -- PIG -------------------- requires ~/.vim/syntax/pig.vim, etc ------
-    au BufNewFile,BufRead *.pig set filetype=pig syntax=pig
+    au BufNewFile,BufRead *.pig set ft=pig syntax=pig
   " -- C + PYTHON --------------------------------------------------------
     au BufNewFile,BufRead *.py,*.pyw,*.c,*.h set sw=4 sts=4 ts=4
     au BufNewFile,BufRead *.py,*.pyw,*.c,*.h set ff=unix tw=79
@@ -88,7 +91,7 @@ set sidescroll=1
 highlight BadWhitespace ctermbg=red guibg=red
 if has('autocmd')
   au BufNewFile,BufRead *.py,*.pyw match BadWhitespace /^\t\+/
-  au BufNewFile,BufRead *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+  au BufNewFile,BufRead *.py,*.pyw,*.c,*.h,*.hpp match BadWhitespace /\s\+$/
 endif
 " -- Searching -----------------------------------------------------------
 set incsearch                   "find the next match as we type the search
@@ -132,6 +135,7 @@ map  <C-j> <C-w>j
 map  <C-k> <C-w>k
 map  <C-l> <C-w>l
 nmap <C-s> :w<CR>
+nmap SQ <ESC>:mksession! .vimsession<CR>:wqa<CR>
 nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
 noremap <silent> <leader>/ :silent nohls<CR>
 set pastetoggle=<F2>                   "for pasting into vim
@@ -141,7 +145,6 @@ set pastetoggle=<F2>                   "for pasting into vim
 cmap w!! w !sudo tee % > /dev/null     "force save when opened while !root
 " -- Autocmd functions ---------------------------------------------------
 if has('autocmd')
-  au BufReadPost * call SetCursorPosition()
   function! SetCursorPosition()
     if &filetype !~ 'commit\c'
       if line("'\"") > 0 && line("'\"") <= line("$")
@@ -150,9 +153,9 @@ if has('autocmd')
       endif
     end
   endfunction
+  au BufReadPost * call SetCursorPosition()
 " ------------------------------------------------------------------------
   "" TODO map this -- don't want to mess up other people's style
-  au BufWritePre * :call <SID>StripTrailingWhitespaces()
   function! <SID>StripTrailingWhitespaces()
     " Preparation: save last search, and cursor position.
     let _s=@/
@@ -164,6 +167,15 @@ if has('autocmd')
     let @/=_s
     call cursor(l, c)
   endfunction
+  au BufWritePre * :call <SID>StripTrailingWhitespaces()
+" ------------------------------------------------------------------------
+  " .vimsession handling -------------------------------------------------
+  function! RestoreSession()
+    if argc() == 0 && filereadable('.vimsession')
+      execute 'source .vimsession'
+    end
+  endfunction
+  au VimEnter * call RestoreSession()
 " ------------------------------------------------------------------------
 endif
 " ========================================================================
