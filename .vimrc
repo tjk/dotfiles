@@ -29,10 +29,14 @@ call vundle#rc()                "sets up vundle for bundle management
     command! Dark :set background=dark | colorscheme solarized
     command! Light :set background=light | colorscheme solarized
   Bundle 'tpope/vim-surround'
+  Bundle 'depuracao/vim-rdoc'
   " -- from vimscripts ---------------------------------------------------
   Bundle 'L9'
   Bundle 'FuzzyFinder'
     highlight Pmenu guifg=whie guibg=blue ctermfg=white ctermbg=blue
+  Bundle 'VimClojure'
+    let vimclojure#HighlightBuiltins=1
+    let vimclojure#ParenRainbow=1
   " -- finished bundle bootstrapping -------------------------------------
 filetype plugin indent on       "required
 " -- Basic stuff ---------------------------------------------------------
