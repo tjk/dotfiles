@@ -29,7 +29,13 @@ call vundle#rc()                "sets up vundle for bundle management
     command! Dark :set background=dark | colorscheme solarized
     command! Light :set background=light | colorscheme solarized
   Bundle 'tpope/vim-surround'
+  Bundle 'tpope/vim-markdown'
+  Bundle 'tpope/vim-fugitive'
   Bundle 'depuracao/vim-rdoc'
+  Bundle 'vim-ruby/vim-ruby'
+  Bundle 'kien/ctrlp.vim'
+  Bundle 'xolox/vim-notes'
+    let g:notes_directory = '~/notes'
   " -- from vimscripts ---------------------------------------------------
   Bundle 'L9'
   Bundle 'FuzzyFinder'
@@ -112,17 +118,17 @@ set showmode                    "show mode all the time
 set wildmenu                    "ctrl-n and ctrl-p to scroll thru matches
 set wildmode=list:longest       "cmdline tab completion similar to bash
 set wildignore=*.o,*.obj,*~     "stuff to ignore when tab completing
-set statusline=%f               "tail of the filename
+"set statusline=%f               "tail of the filename
   " -- Git ---------------------------------------------------------------
-  " set statusline+=[%{GitBranch()}]
+  "set statusline+=%{fugitive#statusline()}
   set formatoptions-=o          "dont continue comments when pushing o/O
   " -- rvm ---------------------------------------------------------------
-  set statusline+=%{exists('g:loaded_rvm')?rvm#statusline():''}
+  "set statusline+=%{exists('g:loaded_rvm')?rvm#statusline():''}
   " ----------------------------------------------------------------------
-set statusline+=%=              "left/right separator
-set statusline+=%c,             "cursor column
-set statusline+=%l/%L           "cursor line/total lines
-set statusline+=\ %P            "percent through file
+"set statusline+=%=              "left/right separator
+"set statusline+=%c,             "cursor column
+"set statusline+=%l/%L           "cursor line/total lines
+"set statusline+=\ %P            "percent through file
 set laststatus=2
 " -- Key mappings --------------------------------------------------------
 "" careful about comments in this section as they mess up map commands
