@@ -1,6 +1,10 @@
 #!/bin/bash
 
-ln -s `pwd`/.vimrc     $HOME/.vimrc
-ln -s `pwd`/.aliases   $HOME/.aliases
-ln -s `pwd`/.gitignore $HOME/.gitignore
-ln -s `pwd`/.gitconfig $HOME/.gitconfig
+files=(".vimrc"
+  ".vimerc" ".aliases"
+  ".gitignore" ".gitconfig")
+
+for file in ${files[@]}
+do
+  ln -vs `pwd`/$file $HOME/$file
+done
