@@ -48,14 +48,14 @@ filetype plugin indent on       "required
 " -- Basic stuff ---------------------------------------------------------
 syntax on
 set modelines=0                 "http://www.guninski.com/vim1.html
-set rnu                         "add relative line numbers
+set relativenumber              "add relative line numbers
 set autoread                    "watch for file changes
 set nocursorline                "want to see _ and diff between . & ,
 set mouse=a                     "enable mouse if possible
+set mousehide                   "hide mouse while characters are typed
 set hidden                      "hide buffers
 set title                       "let vim change terminal window's title
 set ruler                       "show current cursor position
-set linebreak
 set nospell                     "programmers don't need spell correct
 set vb t_vb=                    "disable visual bell
 set noerrorbells
@@ -64,6 +64,7 @@ set whichwrap=b,s,h,l,<,>,[,]   "backspace && cursor keys wrap too
 set history=1000                "how big the history buffer should be
 set undolevels=1000             "how big the undo buffer should be
 set wrap linebreak
+set wrapscan                    "search wraps around eof
 set list listchars=tab:→\ ,trail:·
 highlight SpecialKey term=standout ctermbg=yellow guibg=yellow
 set showbreak=...
@@ -115,6 +116,7 @@ set nofoldenable                "dont fold by default
 set showcmd                     "show incomplete cmds down the bottom
 set cmdheight=2
 set showmode                    "show mode all the time
+set wildchar=<Tab>              "use tab to autocomplete in command line
 set wildmenu                    "ctrl-n and ctrl-p to scroll thru matches
 set wildmode=list:longest       "cmdline tab completion similar to bash
 set wildignore=*.o,*.obj,*~     "stuff to ignore when tab completing
@@ -138,21 +140,34 @@ cmap WQ wq
 cmap wQ wq
 cmap Q q
 nnoremap Y y$
+"allow navigating through long lines that span multiple rows
 nnoremap j gj
 nnoremap k gk
+"improve movement through windows by removing a keystroke
 map  <C-h> <C-w>h
 map  <C-j> <C-w>j
 map  <C-k> <C-w>k
 map  <C-l> <C-w>l
+"control+s save shortcut
 nmap <C-s> :w<CR>
+"easier buffer navigation
+nnoremap <leader>b :b<CR>:buffer<Space>
+"ease opening and sourcing the vimrc
+nmap <silent> <leader>ev :e $MYVIMRC<CR>
+nmap <silent> <leader>sv :so $MYVIMRC<CR>
+"make the current file executable
+nmap <leader>x :w<CR>:!chmod +x %<CR>:e<CR>
+"make a .vimsession file in current directory
 nmap SQ <ESC>:mksession! .vimsession<CR>:wqa<CR>
 nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
+"clear highlighted search results
 noremap <silent> <leader>/ :silent nohls<CR>
-set pastetoggle=<F2>                   "for pasting into vim
+set pastetoggle=<F2>
 :map <F7> :w !xclip<CR><CR>
 :vmap <F7> "*y
 :map <S-F7> :r!xclip -o<CR>
-cmap w!! w !sudo tee % > /dev/null     "force save when opened while !root
+"force save when opened while !root
+cmap w!! w !sudo tee % > /dev/null
 " -- Autocmd functions ---------------------------------------------------
 if has('autocmd')
   function! SetCursorPosition()

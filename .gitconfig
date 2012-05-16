@@ -1,34 +1,36 @@
 [alias]
-    st  = status -sb
-    co  = checkout
-    mrg = merge --no-ff --no-commit
-    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  st  = status -sb
+  co  = checkout
+  mrg = merge --no-ff --no-commit
+  lg  = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 
 [user]
-    name  = TJ Koblentz
-    email = tj.koblentz@gmail.com
+  name  = TJ Koblentz
+  email = tj.koblentz@gmail.com
+  SigningKey = _@tjk.me
 
 [core]
-    editor = /usr/bin/vim
+  editor = /usr/bin/vim
+  excludesfile = ~/.gitignore
 
 [push]
-    default = current
+  default = current
 
 [color]
-    ui = auto
+  ui = auto
 
 [color "branch"]
-    current = yellow reverse
-    local   = yellow
-    remote  = green
+  current = yellow reverse
+  local   = yellow
+  remote  = green
 
 [color "diff"]
-    meta = yellow bold
-    frag = magenta bold
-    old  = red bold
-    new  = green bold
+  meta = yellow bold
+  frag = magenta bold
+  old  = red bold
+  new  = green bold
 
 [color "status"]
-    added     = yellow
-    changed   = green
-    untracked = cyan
+  added     = yellow
+  changed   = green
+  untracked = cyan
