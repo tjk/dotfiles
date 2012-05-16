@@ -4,9 +4,7 @@
 # assume git is installed
 
 # move dotfiles
-files=(".vimrc"
-  ".vimerc" ".aliases"
-  ".gitignore" ".gitconfig")
+files=(".vimrc" ".vimerc" ".aliases" ".gitignore" ".gitconfig")
 for file in ${files[@]}
 do
   ln -vs `pwd`/$file $HOME/$file
