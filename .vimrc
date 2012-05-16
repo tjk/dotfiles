@@ -62,11 +62,11 @@ set wrap linebreak
 set wrapscan                    "search wraps around eof
 set list listchars=tab:→\ ,trail:·
 set showbreak=...
-set guioptions-=T               "turn off needless toolbar on gvim/mvim
 set showmatch                   "shows brace pairs
 set matchpairs+=<:>             "match < and > as well
 set dict=/usr/share/dict/words
 set showtabline=2               "always visible tabline
+set directory=~/.vim/swap,.     "all swap files in one place
 highlight SpecialKey term=standout ctermbg=yellow guibg=yellow
 " -- Cursor --------------------------------------------------------------
 ":h termcap-cursor-shape
@@ -156,15 +156,12 @@ nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
 "make the current file executable
 nmap <leader>x :w<CR>:!chmod +x %<CR>:e<CR>
-"make a .vimsession file in current directory
-nmap SQ <ESC>:mksession! .vimsession<CR>:wqa<CR>
-nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
 "clear highlighted search results
 noremap <silent> <leader>/ :silent nohls<CR>
 set pastetoggle=<F2>
-:map <F7> :w !xclip<CR><CR>
-:vmap <F7> "*y
-:map <S-F7> :r!xclip -o<CR>
+map <F7> :w !xclip<CR><CR>
+vmap <F7> "*y
+map <S-F7> :r!xclip -o<CR>
 "force save when opened while !root
 cmap w!! w !sudo tee % > /dev/null
 " -- Autocmd functions ---------------------------------------------------
@@ -178,8 +175,7 @@ if has('autocmd')
     end
   endfunction
   au BufReadPost * call SetCursorPosition()
-" ------------------------------------------------------------------------
-  "" TODO map this -- don't want to mess up other people's style
+  " ----------------------------------------------------------------------
   function! <SID>StripTrailingWhitespaces()
     " Preparation: save last search, and cursor position.
     let _s=@/
@@ -191,15 +187,8 @@ if has('autocmd')
     let @/=_s
     call cursor(l, c)
   endfunction
+  "" TODO map this -- don't want to mess up other people's style
   au BufWritePre * :call <SID>StripTrailingWhitespaces()
-" ------------------------------------------------------------------------
-  " .vimsession handling -------------------------------------------------
-  function! RestoreSession()
-    if argc() == 0 && filereadable('.vimsession')
-      execute 'source .vimsession'
-    end
-  endfunction
-  au VimEnter * call RestoreSession()
-" ------------------------------------------------------------------------
+  " ----------------------------------------------------------------------
 endif
 " ========================================================================

@@ -10,7 +10,10 @@ do
   ln -vs `pwd`/$file $HOME/$file
 done
 
-# setup vim vundle
+# vim setup
+# -- vundle
 mkdir -p $HOME/.vim/bundle
 git clone https://github.com/gmarik/vundle.git $HOME/.vim/bundle/vundle
 vim +BundleInstall +qall
+# -- swap directory
+mkdir -p $HOME/.vim/swap
