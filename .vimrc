@@ -36,13 +36,8 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'kien/ctrlp.vim'
   Bundle 'xolox/vim-notes'
     let g:notes_directory = '~/notes'
-  " -- from vimscripts ---------------------------------------------------
-  Bundle 'L9'
-  Bundle 'FuzzyFinder'
-    highlight Pmenu guifg=whie guibg=blue ctermfg=white ctermbg=blue
-  Bundle 'VimClojure'
-    let vimclojure#HighlightBuiltins=1
-    let vimclojure#ParenRainbow=1
+  Bundle 'vim-scripts/Tab-Name'
+  Bundle 'vim-scripts/L9'
   " -- finished bundle bootstrapping -------------------------------------
 filetype plugin indent on       "required
 " -- Basic stuff ---------------------------------------------------------
@@ -73,9 +68,11 @@ set showmatch                   "shows brace pairs
 set matchpairs+=<:>             "match < and > as well
 set dict=/usr/share/dict/words
 " -- Cursor --------------------------------------------------------------
-" set cursorline
-" autocmd InsertEnter * highlight CursorLine guifg=white guibg=blue ctermfg=white ctermbg=blue
-" autocmd InsertLeave * highlight CursorLine guifg=white guibg=darkblue ctermfg=white ctermbg=darkblue
+":h termcap-cursor-shape
+" if &term =~ "rxvt-unicode"
+  " let &t_SI=""
+  " let &t_EI=""
+" endif
 " -- Indentation ---------------------------------------------------------
 set tw=500 sw=2 sts=2
 set expandtab
@@ -112,7 +109,7 @@ set hls                         "hilight search results
 set foldmethod=indent           "fold based on indent
 set foldnestmax=3               "deepest fold is 3 levels
 set nofoldenable                "dont fold by default
-" -- Stuff at bottom -----------------------------------------------------
+" -- Command Line stuff --------------------------------------------------
 set showcmd                     "show incomplete cmds down the bottom
 set cmdheight=2
 set showmode                    "show mode all the time
@@ -151,7 +148,7 @@ map  <C-l> <C-w>l
 "control+s save shortcut
 nmap <C-s> :w<CR>
 "easier buffer navigation
-nnoremap <leader>b :b<CR>:buffer<Space>
+nnoremap <leader>b :buffers<CR>:buffer<Space>
 "ease opening and sourcing the vimrc
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
