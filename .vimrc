@@ -61,12 +61,13 @@ set undolevels=1000             "how big the undo buffer should be
 set wrap linebreak
 set wrapscan                    "search wraps around eof
 set list listchars=tab:→\ ,trail:·
-highlight SpecialKey term=standout ctermbg=yellow guibg=yellow
 set showbreak=...
 set guioptions-=T               "turn off needless toolbar on gvim/mvim
 set showmatch                   "shows brace pairs
 set matchpairs+=<:>             "match < and > as well
 set dict=/usr/share/dict/words
+set showtabline=2               "always visible tabline
+highlight SpecialKey term=standout ctermbg=yellow guibg=yellow
 " -- Cursor --------------------------------------------------------------
 ":h termcap-cursor-shape
 " if &term =~ "rxvt-unicode"
@@ -145,10 +146,11 @@ map  <C-h> <C-w>h
 map  <C-j> <C-w>j
 map  <C-k> <C-w>k
 map  <C-l> <C-w>l
-"control+s save shortcut
-nmap <C-s> :w<CR>
 "easier buffer navigation
 nnoremap <leader>b :buffers<CR>:buffer<Space>
+"TODO C-tab doesn't work (interecepted by urxvt)
+nmap <C-tab> :bn<CR>
+imap <C-tab> <ESC>:bn<CR>i
 "ease opening and sourcing the vimrc
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
