@@ -14,7 +14,7 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'gmarik/vundle'
   Bundle 'scrooloose/nerdtree'
     let NERDTreeWinPos="left"
-    let NERDTreeWinSize=35
+    let NERDTreeWinSize=30
     let NERDTreeIgnore=['\.pyc$']
     silent! nmap <silent> <Leader>p :NERDTreeToggle<CR>
   Bundle 'Lokaltog/vim-powerline'
@@ -34,6 +34,10 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'depuracao/vim-rdoc'
   Bundle 'vim-ruby/vim-ruby'
   Bundle 'kien/ctrlp.vim'
+  Bundle 'xolox/vim-session'
+    let g:session_autoload='no'
+    map <leader>q :SaveSession<CR>:qall!<CR>
+    map <leader>l :OpenSession<CR>
   Bundle 'xolox/vim-notes'
     let g:notes_directory = '~/notes'
   Bundle 'vim-scripts/Tab-Name'
