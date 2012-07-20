@@ -1,50 +1,60 @@
-" == TJ's vimrc ==========================================================
-" -- Bootstrap -----------------------------------------------------------
+" == TJ's vimrc ===============================================================
+" -- Bootstrap ----------------------------------------------------------------
 set nocompatible                "don't emulate vi's limitations
 filetype off                    "required
 let mapleader=','               "use , rather than default \ as leader
 set rtp+=~/.vim/bundle/vundle/  "add to vim runtime path
 call vundle#rc()                "sets up vundle for bundle management
-  " -- Bundles -----------------------------------------------------------
+  " -- Bundles ----------------------------------------------------------------
   " >> set the bundles up by running the following two commands in shell
   " $ git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
   " $ vim +BundleInstall +qall
   " Vundle doesn't accept comments on same line -- Vundle manages itself
-  " -- from github -------------------------------------------------------
+  " -- from github ------------------------------------------------------------
   Bundle 'gmarik/vundle'
   Bundle 'scrooloose/nerdtree'
     let NERDTreeWinPos="left"
     let NERDTreeWinSize=30
     let NERDTreeIgnore=['\.pyc$']
-    silent! nmap <silent> <Leader>p :NERDTreeToggle<CR>
-  Bundle 'Lokaltog/vim-powerline'
-    let g:Powerline_symbols = 'fancy'
-  Bundle 'ervandew/supertab'
-  Bundle 'mattn/zencoding-vim'
-  Bundle 'tpope/vim-rails'
-    command! -bar -nargs=1 OpenURL :!chromium <args>
+    silent! nmap <silent> <leader>p :NERDTreeToggle<CR>
   Bundle 'altercation/vim-colors-solarized'
     set background=dark
     colorscheme solarized
     command! Dark :set background=dark | colorscheme solarized
     command! Light :set background=light | colorscheme solarized
+  Bundle 'Lokaltog/vim-powerline'
+    let g:Powerline_symbols='fancy'
+  Bundle 'ervandew/supertab'
+  Bundle 'mattn/zencoding-vim'
+  Bundle 'tpope/vim-rails'
+    "TODO change this
+    command! -bar -nargs=1 OpenURL :!chromium <args>
   Bundle 'tpope/vim-surround'
-  Bundle 'tpope/vim-markdown'
   Bundle 'tpope/vim-fugitive'
-  Bundle 'depuracao/vim-rdoc'
-  Bundle 'vim-ruby/vim-ruby'
   Bundle 'kien/ctrlp.vim'
+    let g:ctrlp_working_path_mode=2
   Bundle 'xolox/vim-session'
     let g:session_autoload='no'
+    let g:session_autosave='no'
     map <leader>q :SaveSession<CR>:qall!<CR>
     map <leader>l :OpenSession<CR>
-  Bundle 'xolox/vim-notes'
-    let g:notes_directory = '~/notes'
   Bundle 'vim-scripts/Tab-Name'
   Bundle 'vim-scripts/L9'
-  " -- finished bundle bootstrapping -------------------------------------
+  Bundle 'aaronbieber/quicktask'
+  Bundle 'scrooloose/nerdcommenter'
+  " File types ----------------------------------------------------------------
+  Bundle 'tpope/vim-markdown'
+  Bundle 'tpope/vim-haml'
+  Bundle 'tpope/vim-markdown'
+  Bundle 'depuracao/vim-rdoc'
+  Bundle 'vim-ruby/vim-ruby'
+  Bundle 'kchmck/vim-coffee-script'
+  Bundle 'dag/vim2hs'
+    let g:haddock_browser='/usr/bin/chromium'
+    let g:ghc='/usr/bin/ghc'
+  " -- finished bundle bootstrapping ------------------------------------------
 filetype plugin indent on       "required
-" -- Basic stuff ---------------------------------------------------------
+" -- Basic stuff --------------------------------------------------------------
 syntax on
 set modelines=0                 "http://www.guninski.com/vim1.html
 set relativenumber              "add relative line numbers
@@ -56,8 +66,7 @@ set hidden                      "hide buffers
 set title                       "let vim change terminal window's title
 set ruler                       "show current cursor position
 set nospell                     "programmers don't need spell correct
-set vb t_vb=                    "disable visual bell
-set noerrorbells
+set vb t_vb=                    "disable beep AND visual bell
 set backspace=indent,eol,start  "backspace between lines, etc
 set whichwrap=b,s,h,l,<,>,[,]   "backspace && cursor keys wrap too
 set history=1000                "how big the history buffer should be
@@ -71,50 +80,32 @@ set matchpairs+=<:>             "match < and > as well
 set dict=/usr/share/dict/words
 set showtabline=2               "always visible tabline
 set directory=~/.vim/swap,.     "all swap files in one place
-highlight SpecialKey term=standout ctermbg=yellow guibg=yellow
-" -- Cursor --------------------------------------------------------------
+" -- Cursor -------------------------------------------------------------------
+"TODO
 ":h termcap-cursor-shape
 " if &term =~ "rxvt-unicode"
   " let &t_SI=""
   " let &t_EI=""
 " endif
-" -- Indentation ---------------------------------------------------------
-set tw=500 sw=2 sts=2
+" -- Indentation --------------------------------------------------------------
+set tw=79 sw=2 sts=2
 set expandtab
 set smarttab                    "intelligent tab + backspace
 set autoindent                  "use current indent level for next line
 set smartindent                 "intelligent guess at next line's indent
-" -- Filetype specifics --------------------------------------------------
-  if has('autocmd')
-  " -- PIG -------------------- requires ~/.vim/syntax/pig.vim, etc ------
-    au BufNewFile,BufRead *.pig set ft=pig syntax=pig
-  " -- C + PYTHON --------------------------------------------------------
-    au BufNewFile,BufRead *.py,*.pyw,*.c,*.h set sw=4 sts=4 ts=4
-    au BufNewFile,BufRead *.py,*.pyw,*.c,*.h set ff=unix tw=79
-  " -- Makefile ----------------------------------------------------------
-    au BufRead,BufNewFile Makefile* set noexpandtab
-  " -- npc ---------------------------------------------------------------
-    au BufNewFile,BufRead *.npc set ff=unix
-  endif
-" -- Offscren scrolling --------------------------------------------------
+" -- Offscren scrolling -------------------------------------------------------
 set scrolloff=1
 set sidescrolloff=7
 set sidescroll=1
-" -- Marking bad whitespace ----------------------------------------------
-highlight BadWhitespace ctermbg=red guibg=red
-if has('autocmd')
-  au BufNewFile,BufRead *.py,*.pyw match BadWhitespace /^\t\+/
-  au BufNewFile,BufRead *.py,*.pyw,*.c,*.h,*.hpp match BadWhitespace /\s\+$/
-endif
-" -- Searching -----------------------------------------------------------
+" -- Searching ----------------------------------------------------------------
 set incsearch                   "find the next match as we type the search
 set ignorecase
-set hls                         "hilight search results
-" -- Folding -------------------------------------------------------------
+set hlsearch                    "hilight search results
+" -- Folding ------------------------------------------------------------------
 set foldmethod=indent           "fold based on indent
 set foldnestmax=3               "deepest fold is 3 levels
 set nofoldenable                "dont fold by default
-" -- Command Line stuff --------------------------------------------------
+" -- Command Line stuff -------------------------------------------------------
 set showcmd                     "show incomplete cmds down the bottom
 set cmdheight=2
 set showmode                    "show mode all the time
@@ -122,19 +113,9 @@ set wildchar=<Tab>              "use tab to autocomplete in command line
 set wildmenu                    "ctrl-n and ctrl-p to scroll thru matches
 set wildmode=list:longest       "cmdline tab completion similar to bash
 set wildignore=*.o,*.obj,*~     "stuff to ignore when tab completing
-"set statusline=%f               "tail of the filename
-  " -- Git ---------------------------------------------------------------
-  "set statusline+=%{fugitive#statusline()}
-  set formatoptions-=o          "dont continue comments when pushing o/O
-  " -- rvm ---------------------------------------------------------------
-  "set statusline+=%{exists('g:loaded_rvm')?rvm#statusline():''}
-  " ----------------------------------------------------------------------
-"set statusline+=%=              "left/right separator
-"set statusline+=%c,             "cursor column
-"set statusline+=%l/%L           "cursor line/total lines
-"set statusline+=\ %P            "percent through file
-set laststatus=2
-" -- Key mappings --------------------------------------------------------
+set formatoptions-=o            "dont continue comments when pushing o/O
+set laststatus=2                "always show status bar
+" -- Key mappings -------------------------------------------------------------
 "" careful about comments in this section as they mess up map commands
 nnoremap ; :
 cmap W w
@@ -168,8 +149,10 @@ vmap <F7> "*y
 map <S-F7> :r!xclip -o<CR>
 "force save when opened while !root
 cmap w!! w !sudo tee % > /dev/null
-" -- Autocmd functions ---------------------------------------------------
-if has('autocmd')
+"note taking
+map <leader>n :e! ~/notes<CR>
+" -- Autocmd functions --------------------------------------------------------
+if has("autocmd")
   function! SetCursorPosition()
     if &filetype !~ 'commit\c'
       if line("'\"") > 0 && line("'\"") <= line("$")
@@ -178,8 +161,8 @@ if has('autocmd')
       endif
     end
   endfunction
-  au BufReadPost * call SetCursorPosition()
-  " ----------------------------------------------------------------------
+  autocmd BufReadPost * call SetCursorPosition()
+  " ---------------------------------------------------------------------------
   function! <SID>StripTrailingWhitespaces()
     " Preparation: save last search, and cursor position.
     let _s=@/
@@ -192,7 +175,38 @@ if has('autocmd')
     call cursor(l, c)
   endfunction
   "" TODO map this -- don't want to mess up other people's style
-  au BufWritePre * :call <SID>StripTrailingWhitespaces()
-  " ----------------------------------------------------------------------
+  autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+  " ---------------------------------------------------------------------------
+  "" TODO surround in if clause -- if in rxvt
+  command! -bar -nargs=1 FSize :! sh printf '\33]50;%s%d\007'
+    \ "xft:incosolata\ for\ Powerline:antialias=true:size=" <q-args>
+  noremap + :FSize 14<CR>
+  noremap - :FSize 11<CR>
+  " ---------------------------------------------------------------------------
+  augroup FTMisc
+    autocmd!
+    autocmd BufReadPre *.pdf         setlocal binary
+  augroup END
+  " ---------------------------------------------------------------------------
+  augroup FTOptions
+    autocmd!
+    autocmd FileType make            setlocal noexpandtab
+    autocmd FileType c,cpp,cs,java   setlocal ai et sta sw=4 sts=4 cin
+    autocmd FileType sh,csh,tcsh,zsh setlocal ai et sta sw=4 sts=4
+    autocmd FileType sh,csh,tcsh,zsh
+      \ inoremap <silent><buffer> <leader>! #!/bin/<C-R>=&ft<CR>
+    autocmd FileType markdown,liquid setlocal ai et sta sw=2 sts=2 tw=72
+    autocmd FileType javascript      setlocal ai et sta sw=2 sts=2
+                                       \ ts=2 cin isk+=$
+    autocmd FileType tex,css         setlocal ai et sta sw=2 sts=2
+    autocmd FileType html,xhtml      setlocal ai et sta sw=2 sts=2
+    autocmd FileType yaml,ruby       setlocal ai et sta sw=2 sts=2
+    autocmd FileType perl,python,ruby
+      \ inoremap <silent><buffer> <leader>! #!/usr/bin/env <C-R>=&ft<CR>
+    autocmd FileType help            setlocal ai fo+=2n |
+                                       \ silent! setlocal nospell
+    autocmd FileType help nnoremap <silent><buffer> q :q<CR>
+  augroup END
+  " ---------------------------------------------------------------------------
 endif
-" ========================================================================
+" =============================================================================

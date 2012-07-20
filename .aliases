@@ -1,15 +1,24 @@
+alias svi='sudo vim -c ":cd %:p:h"'
 alias vi='vim -c ":cd %:p:h"'
-alias vime='vim -u ~/.vimerc -x'
+alias vime='vim -c ":cd %:p:h" -u ~/.vimerc -x'
 
 alias rm='nocorrect rm'
 alias mv='nocorrect mv'
 alias cp='nocorrect cp'
 alias mkdir='nocorrect mkdir'
-alias chromium='chromium --enable-plugins --memory-model=low --user-agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.75 Safari/535.7" 2&> /dev/null &'
+
+alias chromium='chromium --enable-plugins --memory-model=low'
 alias firefox='firefox 2&> /dev/null &'
-alias g=git
-alias y=yaourt
+
+alias g='git'
+
+alias spac='sudo pacman-color'
+alias pac='pacman-color'
+alias cower='cower --color='auto'
+alias y='yaourt'
+
 alias mpc='ncmpc -c -m -S'
+alias weechat='weechat-curses'
 
 alias pianobar='/home/tj/system/pianobar'
 alias ls='/usr/bin/vendor_perl/ls++'
@@ -19,3 +28,7 @@ alias msfconsole='/opt/metasploit/msfconsole'
 alias msfpayload='/opt/metasploit/msfpayload'
 alias msfencode='/opt/metasploit/msfencode'
 alias msfvenom='/opt/metasploit/msfvenom'
+
+alias jelly='/home/tj/workspace/jelly/bin/jelly'
+
+alias rtorrent='tmux attach-session -t rtorrent || tmux new-session -s rtorrent'
