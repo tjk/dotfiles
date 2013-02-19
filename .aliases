@@ -11,10 +11,11 @@ alias chromium='chromium --enable-plugins --memory-model=low'
 alias firefox='firefox 2&> /dev/null &'
 
 alias g='git'
+alias gp='git remote | xargs -L 1 git push'
 
 alias spac='sudo pacman-color'
 alias pac='pacman-color'
-alias cower='cower --color='auto'
+alias cower='cower --color="auto"'
 alias y='yaourt'
 
 alias mpc='ncmpc -c -m -S'

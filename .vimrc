@@ -24,6 +24,7 @@ call vundle#rc()                "sets up vundle for bundle management
     command! Light :set background=light | colorscheme solarized
   Bundle 'Lokaltog/vim-powerline'
     let g:Powerline_symbols='fancy'
+  Bundle 'Valloric/YouCompleteMe'
   Bundle 'ervandew/supertab'
   Bundle 'mattn/zencoding-vim'
   Bundle 'tpope/vim-rails'
@@ -47,6 +48,7 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'tpope/vim-haml'
   Bundle 'tpope/vim-markdown'
   Bundle 'depuracao/vim-rdoc'
+  Bundle 'derekwyatt/vim-scala'
   Bundle 'vim-ruby/vim-ruby'
   Bundle 'kchmck/vim-coffee-script'
   Bundle 'dag/vim2hs'
@@ -100,6 +102,7 @@ set sidescroll=1
 " -- Searching ----------------------------------------------------------------
 set incsearch                   "find the next match as we type the search
 set ignorecase
+set smartcase
 set hlsearch                    "hilight search results
 " -- Folding ------------------------------------------------------------------
 set foldmethod=indent           "fold based on indent
