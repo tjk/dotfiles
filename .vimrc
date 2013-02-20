@@ -25,6 +25,9 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'Lokaltog/vim-powerline'
     let g:Powerline_symbols='fancy'
   Bundle 'Valloric/YouCompleteMe'
+    " TODO
+    " cd ~/.vim/bundle/YouCompleteMe
+    " ./install.sh --clang-completer
   Bundle 'ervandew/supertab'
   Bundle 'mattn/zencoding-vim'
   Bundle 'tpope/vim-rails'
