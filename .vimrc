@@ -3,6 +3,18 @@
 set nocompatible                "don't emulate vi's limitations
 filetype off                    "required
 let mapleader=','               "use , rather than default \ as leader
+  " -- Starting auto-installing Vundle
+  "  http://www.erikzaadi.com/2012/03/19/auto-installing-vundle-from-your-vimrc/
+  let vundle_installed=0
+  let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+  if !filereadable(vundle_readme)
+    echo 'Installing Vundle...'
+    echo ''
+    silent !mkdir -p ~/.vim/bundle
+    silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+    let vundle_installed=1
+  endif
+  " -- Done auto-installing Vundle
 set rtp+=~/.vim/bundle/vundle/  "add to vim runtime path
 call vundle#rc()                "sets up vundle for bundle management
   " -- Bundles ----------------------------------------------------------------
@@ -46,6 +58,7 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'vim-scripts/L9'
   Bundle 'aaronbieber/quicktask'
   Bundle 'scrooloose/nerdcommenter'
+  Bundle 'scrooloose/syntastic'
   " File types ----------------------------------------------------------------
   Bundle 'tpope/vim-markdown'
   Bundle 'tpope/vim-haml'
@@ -57,6 +70,12 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'dag/vim2hs'
     let g:haddock_browser='/usr/bin/chromium'
     let g:ghc='/usr/bin/ghc'
+  " -- install above bundles
+  if vundle_installed == 1
+    echo 'Installing bundles, please ignore key map error messages'
+    echo ''
+    :BundleInstall
+  endif
   " -- finished bundle bootstrapping ------------------------------------------
 filetype plugin indent on       "required
 " -- Basic stuff --------------------------------------------------------------
