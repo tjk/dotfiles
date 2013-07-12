@@ -18,11 +18,6 @@ let mapleader=','               "use , rather than default \ as leader
 set rtp+=~/.vim/bundle/vundle/  "add to vim runtime path
 call vundle#rc()                "sets up vundle for bundle management
   " -- Bundles ----------------------------------------------------------------
-  " >> set the bundles up by running the following two commands in shell
-  " $ git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-  " $ vim +BundleInstall +qall
-  " Vundle doesn't accept comments on same line -- Vundle manages itself
-  " -- from github ------------------------------------------------------------
   Bundle 'gmarik/vundle'
   Bundle 'scrooloose/nerdtree'
     let NERDTreeWinPos="left"
