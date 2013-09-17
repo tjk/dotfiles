@@ -18,6 +18,7 @@ call vundle#rc()                "sets up vundle for bundle management
     let NERDTreeIgnore=['\.pyc$']
     silent! nmap <silent> <leader>p :NERDTreeToggle<CR>
   Bundle 'altercation/vim-colors-solarized'
+    let g:solarized_termcolors=16
     set background=dark
     colorscheme solarized
     command! Dark :set background=dark | colorscheme solarized
@@ -43,11 +44,14 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'aaronbieber/quicktask'
   Bundle 'scrooloose/nerdcommenter'
   " File types ----------------------------------------------------------------
+  Bundle 'jnwhiteh/vim-golang'
   Bundle 'tpope/vim-markdown'
   Bundle 'tpope/vim-haml'
   Bundle 'tpope/vim-markdown'
+  Bundle 'derekwyatt/vim-scala'
   Bundle 'depuracao/vim-rdoc'
   Bundle 'vim-ruby/vim-ruby'
+  Bundle 'briancollins/vim-jst'
   Bundle 'kchmck/vim-coffee-script'
   Bundle 'dag/vim2hs'
     let g:haddock_browser='/usr/bin/chromium'
