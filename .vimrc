@@ -3,14 +3,21 @@
 set nocompatible                "don't emulate vi's limitations
 filetype off                    "required
 let mapleader=','               "use , rather than default \ as leader
+  " -- Starting auto-installing Vundle
+  "  http://www.erikzaadi.com/2012/03/19/auto-installing-vundle-from-your-vimrc/
+  let vundle_installed=0
+  let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+  if !filereadable(vundle_readme)
+    echo 'Installing Vundle...'
+    echo ''
+    silent !mkdir -p ~/.vim/bundle
+    silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+    let vundle_installed=1
+  endif
+  " -- Done auto-installing Vundle
 set rtp+=~/.vim/bundle/vundle/  "add to vim runtime path
 call vundle#rc()                "sets up vundle for bundle management
   " -- Bundles ----------------------------------------------------------------
-  " >> set the bundles up by running the following two commands in shell
-  " $ git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-  " $ vim +BundleInstall +qall
-  " Vundle doesn't accept comments on same line -- Vundle manages itself
-  " -- from github ------------------------------------------------------------
   Bundle 'gmarik/vundle'
   Bundle 'scrooloose/nerdtree'
     let NERDTreeWinPos="left"
@@ -25,6 +32,10 @@ call vundle#rc()                "sets up vundle for bundle management
     command! Light :set background=light | colorscheme solarized
   Bundle 'Lokaltog/vim-powerline'
     let g:Powerline_symbols='fancy'
+  Bundle 'Valloric/YouCompleteMe'
+    " TODO
+    " cd ~/.vim/bundle/YouCompleteMe
+    " ./install.sh --clang-completer
   Bundle 'ervandew/supertab'
   Bundle 'mattn/zencoding-vim'
   Bundle 'tpope/vim-rails'
@@ -43,6 +54,7 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'vim-scripts/L9'
   Bundle 'aaronbieber/quicktask'
   Bundle 'scrooloose/nerdcommenter'
+  Bundle 'scrooloose/syntastic'
   " File types ----------------------------------------------------------------
   Bundle 'jnwhiteh/vim-golang'
   Bundle 'tpope/vim-markdown'
@@ -50,12 +62,19 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'tpope/vim-markdown'
   Bundle 'derekwyatt/vim-scala'
   Bundle 'depuracao/vim-rdoc'
+  Bundle 'derekwyatt/vim-scala'
   Bundle 'vim-ruby/vim-ruby'
   Bundle 'briancollins/vim-jst'
   Bundle 'kchmck/vim-coffee-script'
   Bundle 'dag/vim2hs'
     let g:haddock_browser='/usr/bin/chromium'
     let g:ghc='/usr/bin/ghc'
+  " -- install above bundles
+  if vundle_installed == 1
+    echo 'Installing bundles, please ignore key map error messages'
+    echo ''
+    :BundleInstall
+  endif
   " -- finished bundle bootstrapping ------------------------------------------
 filetype plugin indent on       "required
 " -- Basic stuff --------------------------------------------------------------
@@ -104,6 +123,7 @@ set sidescroll=1
 " -- Searching ----------------------------------------------------------------
 set incsearch                   "find the next match as we type the search
 set ignorecase
+set smartcase
 set hlsearch                    "hilight search results
 " -- Folding ------------------------------------------------------------------
 set foldmethod=indent           "fold based on indent
