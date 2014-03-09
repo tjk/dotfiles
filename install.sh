@@ -6,7 +6,7 @@
 files=(vimrc vimerc aliases gitignore gitconfig)
 for file in ${files[@]}
 do
-  ln -vs `pwd`/_$file $HOME/.$file
+  ln -vs `pwd`/.$file $HOME/.$file
 done
 
 # Setup VIM by running vundle
