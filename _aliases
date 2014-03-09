@@ -1,3 +1,5 @@
+#!/bin/bash
+
 alias svi='sudo vim -c ":cd %:p:h"'
 alias vi='vim -c ":cd %:p:h"'
 alias vime='vim -c ":cd %:p:h" -u ~/.vimerc -x'
@@ -33,3 +35,10 @@ alias msfvenom='/opt/metasploit/msfvenom'
 alias jelly='/home/tj/workspace/jelly/bin/jelly'
 
 alias rtorrent='tmux attach-session -t rtorrent || tmux new-session -s rtorrent'
+
+function tail_apache() {
+    last_file=`\ls -t /var/log/apache2/$1.* | head -1`
+    tail $last_file $2
+}
+alias taa='tail_apache access'
+alias tae='tail_apache error'
