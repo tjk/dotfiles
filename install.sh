@@ -1,16 +1,15 @@
 #!/bin/bash
+#
+# Assumes git is installed
 
-# git clone https://github.com/tjeezy/home.git
-# assume git is installed
-
-# move dotfiles
-files=(".vimrc" ".vimerc" ".aliases" ".gitignore" ".gitconfig")
+# Move dotfiles to $HOME directory
+files=(vimrc vimerc aliases gitignore gitconfig)
 for file in ${files[@]}
 do
-  ln -vs `pwd`/$file $HOME/$file
+  ln -vs `pwd`/_$file $HOME/.$file
 done
 
-# vim setup
+# Setup VIM by running vundle
 # -- vundle
 mkdir -p $HOME/.vim/bundle
 git clone https://github.com/gmarik/vundle.git $HOME/.vim/bundle/vundle
