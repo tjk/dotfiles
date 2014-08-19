@@ -3,11 +3,15 @@
   co  = checkout
   mrg = merge --no-ff --no-commit
   lg  = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+
+[status]
+  submodulesummary = true
 
 [user]
   name  = TJ Koblentz
-  email = tj.koblentz@gmail.com
-  SigningKey = _@tjk.me
+  email = tj@brightroll.com
+  # SigningKey = _@tjk.me
 
 [core]
   editor = /usr/bin/vim

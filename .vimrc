@@ -22,17 +22,13 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'scrooloose/nerdtree'
     let NERDTreeWinPos="left"
     let NERDTreeWinSize=30
-    let NERDTreeIgnore=['\.pyc$']
+    let NERDTreeIgnore=['\.pyc$', '\.gcov$', '\.gcda$', '\.gcno$']
     silent! nmap <silent> <leader>p :NERDTreeToggle<CR>
   Bundle 'altercation/vim-colors-solarized'
-    let g:solarized_termcolors=16
     set background=dark
     colorscheme solarized
     command! Dark :set background=dark | colorscheme solarized
     command! Light :set background=light | colorscheme solarized
-  Bundle 'Lokaltog/vim-powerline'
-    let g:Powerline_symbols='fancy'
-  Bundle 'Valloric/YouCompleteMe'
     " TODO
     " cd ~/.vim/bundle/YouCompleteMe
     " ./install.sh --clang-completer
@@ -45,6 +41,7 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'tpope/vim-fugitive'
   Bundle 'kien/ctrlp.vim'
     let g:ctrlp_working_path_mode=2
+    let g:ctrlp_user_command=['.git/', 'cd %s && git ls-files']
   Bundle 'xolox/vim-session'
     let g:session_autoload='no'
     let g:session_autosave='no'
@@ -54,7 +51,7 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'vim-scripts/L9'
   Bundle 'aaronbieber/quicktask'
   Bundle 'scrooloose/nerdcommenter'
-  Bundle 'scrooloose/syntastic'
+  "Bundle 'scrooloose/syntastic'
   " File types ----------------------------------------------------------------
   Bundle 'jnwhiteh/vim-golang'
   Bundle 'tpope/vim-markdown'
@@ -65,10 +62,13 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'derekwyatt/vim-scala'
   Bundle 'vim-ruby/vim-ruby'
   Bundle 'briancollins/vim-jst'
+  Bundle 'digitaltoad/vim-jade'
   Bundle 'kchmck/vim-coffee-script'
+  Bundle 'jeroenbourgois/vim-actionscript'
   Bundle 'dag/vim2hs'
     let g:haddock_browser='/usr/bin/chromium'
     let g:ghc='/usr/bin/ghc'
+  Bundle 'elixir-lang/vim-elixir'
   " -- install above bundles
   if vundle_installed == 1
     echo 'Installing bundles, please ignore key map error messages'
@@ -142,10 +142,10 @@ set laststatus=2                "always show status bar
 " -- Key mappings -------------------------------------------------------------
 "" careful about comments in this section as they mess up map commands
 nnoremap ; :
-cmap W w
-cmap WQ wq
-cmap wQ wq
-cmap Q q
+" cmap W w
+" cmap WQ wq
+" cmap wQ wq
+" cmap Q q
 nnoremap Y y$
 "allow navigating through long lines that span multiple rows
 nnoremap j gj
@@ -201,9 +201,6 @@ if has("autocmd")
   "" TODO map this -- don't want to mess up other people's style
   autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
   " ---------------------------------------------------------------------------
-  "" TODO surround in if clause -- if in rxvt
-  command! -bar -nargs=1 FSize :! sh printf '\33]50;%s%d\007'
-    \ "xft:incosolata\ for\ Powerline:antialias=true:size=" <q-args>
   noremap + :FSize 14<CR>
   noremap - :FSize 11<CR>
   " ---------------------------------------------------------------------------
