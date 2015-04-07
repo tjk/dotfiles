@@ -42,11 +42,6 @@ call vundle#rc()                "sets up vundle for bundle management
   Bundle 'kien/ctrlp.vim'
     let g:ctrlp_working_path_mode=2
     let g:ctrlp_user_command=['.git/', 'cd %s && git ls-files']
-  Bundle 'xolox/vim-session'
-    let g:session_autoload='no'
-    let g:session_autosave='no'
-    map <leader>q :SaveSession<CR>:qall!<CR>
-    map <leader>l :OpenSession<CR>
   Bundle 'vim-scripts/Tab-Name'
   Bundle 'vim-scripts/L9'
   Bundle 'aaronbieber/quicktask'

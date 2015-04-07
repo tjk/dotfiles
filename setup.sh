@@ -8,11 +8,15 @@
 touch ~/-@
 sudo touch /-@
 
+# Determine current directory
+# http://stackoverflow.com/a/4774063
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
 # Move dotfiles to $HOME directory
 files=(vimrc vimerc aliases gitignore gitconfig)
 for file in ${files[@]}
 do
-  ln -vs `dirname $0`/.$file $HOME/.$file
+  ln -vs $SCRIPTPATH/.$file $HOME/.$file
 done
 
 # Setup VIM by running vundle
