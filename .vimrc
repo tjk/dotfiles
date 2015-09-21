@@ -98,6 +98,7 @@ set matchpairs+=<:>             "match < and > as well
 set dict=/usr/share/dict/words
 set showtabline=2               "always visible tabline
 set directory=~/.vim/swap,.     "all swap files in one place
+set clipboard=unnamed           "yank/delete to system clipboard by default
 " -- Cursor -------------------------------------------------------------------
 "TODO
 ":h termcap-cursor-shape
