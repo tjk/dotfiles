@@ -13,6 +13,9 @@
   email = tj@brightroll.com
   # SigningKey = _@tjk.me
 
+[diff]
+  renames = true
+
 [core]
   editor = /usr/bin/vim
   excludesfile = ~/.gitignore

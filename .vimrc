@@ -75,7 +75,6 @@ filetype plugin indent on       "required
 NeoBundleCheck
 " -- Basic stuff --------------------------------------------------------------
 syntax on
-set modelines=0                 "http://www.guninski.com/vim1.html
 set relativenumber              "add relative line numbers
 set autoread                    "watch for file changes
 set nocursorline                "want to see _ and diff between . & ,
@@ -225,5 +224,15 @@ if has("autocmd")
     autocmd FileType help nnoremap <silent><buffer> q :q<CR>
   augroup END
   " ---------------------------------------------------------------------------
+  function! AppendModeline()
+    " Append modeline after last line in buffer.
+    " Use substitute() instead of printf() to handle '%%s' modeline in LaTeX
+    " files.
+    let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
+          \ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
+    let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
+    call append(line("$"), l:modeline)
+  endfunction
+  nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 endif
 " =============================================================================
