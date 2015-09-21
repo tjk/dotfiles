@@ -1,82 +1,78 @@
 " == TJ's vimrc ===============================================================
 " -- Bootstrap ----------------------------------------------------------------
-set nocompatible                "don't emulate vi's limitations
+if 0 | endif                    "skip initialization for vim-tiny or vim-small
+if has('vim_starting')
+  if &compatible
+    set nocompatible            "don't emulate vi's limitations
+  endif
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
 filetype off                    "required
 let mapleader=','               "use , rather than default \ as leader
-  " -- Starting auto-installing Vundle
-  "  http://www.erikzaadi.com/2012/03/19/auto-installing-vundle-from-your-vimrc/
-  let vundle_installed=0
-  let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
-  if !filereadable(vundle_readme)
-    echo 'Installing Vundle...'
-    echo ''
-    silent !mkdir -p ~/.vim/bundle
-    silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
-    let vundle_installed=1
-  endif
-  " -- Done auto-installing Vundle
-set rtp+=~/.vim/bundle/vundle/  "add to vim runtime path
-call vundle#rc()                "sets up vundle for bundle management
-  " -- Bundles ----------------------------------------------------------------
-  Bundle 'gmarik/vundle'
-  Bundle 'scrooloose/nerdtree'
-    let NERDTreeWinPos="left"
-    let NERDTreeWinSize=30
-    let NERDTreeIgnore=['\.pyc$', '\.gcov$', '\.gcda$', '\.gcno$']
-    silent! nmap <silent> <leader>p :NERDTreeToggle<CR>
-  Bundle 'altercation/vim-colors-solarized'
-    set background=dark
-    colorscheme solarized
-    command! Dark :set background=dark | colorscheme solarized
-    command! Light :set background=light | colorscheme solarized
-    " TODO
-    " cd ~/.vim/bundle/YouCompleteMe
-    " ./install.sh --clang-completer
-  Bundle 'ervandew/supertab'
-  Bundle 'mattn/zencoding-vim'
-  Bundle 'tpope/vim-rails'
-    "TODO change this
-    command! -bar -nargs=1 OpenURL :!chromium <args>
-  Bundle 'tpope/vim-surround'
-  Bundle 'tpope/vim-fugitive'
-  Bundle 'kien/ctrlp.vim'
-    let g:ctrlp_working_path_mode=2
-    let g:ctrlp_user_command=['.git/', 'cd %s && git ls-files']
-  Bundle 'xolox/vim-session'
-    let g:session_autoload='no'
-    let g:session_autosave='no'
-    map <leader>q :SaveSession<CR>:qall!<CR>
-    map <leader>l :OpenSession<CR>
-  Bundle 'vim-scripts/Tab-Name'
-  Bundle 'vim-scripts/L9'
-  Bundle 'aaronbieber/quicktask'
-  Bundle 'scrooloose/nerdcommenter'
-  "Bundle 'scrooloose/syntastic'
-  " File types ----------------------------------------------------------------
-  Bundle 'jnwhiteh/vim-golang'
-  Bundle 'tpope/vim-markdown'
-  Bundle 'tpope/vim-haml'
-  Bundle 'tpope/vim-markdown'
-  Bundle 'derekwyatt/vim-scala'
-  Bundle 'depuracao/vim-rdoc'
-  Bundle 'derekwyatt/vim-scala'
-  Bundle 'vim-ruby/vim-ruby'
-  Bundle 'briancollins/vim-jst'
-  Bundle 'digitaltoad/vim-jade'
-  Bundle 'kchmck/vim-coffee-script'
-  Bundle 'jeroenbourgois/vim-actionscript'
-  Bundle 'dag/vim2hs'
-    let g:haddock_browser='/usr/bin/chromium'
-    let g:ghc='/usr/bin/ghc'
-  Bundle 'elixir-lang/vim-elixir'
-  " -- install above bundles
-  if vundle_installed == 1
-    echo 'Installing bundles, please ignore key map error messages'
-    echo ''
-    :BundleInstall
-  endif
-  " -- finished bundle bootstrapping ------------------------------------------
+" -- Starting auto-installing NeoBundle
+let neobundle_readme=expand('~/.vim/bundle/neobundle.vim/README.md')
+if !filereadable(neobundle_readme)
+  echo 'Installing NeoBundle...'
+  echo ''
+  silent !mkdir -p ~/.vim/bundle
+  silent !git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+endif
+let g:make = 'gmake'
+if system('uname -o') =~ '^GNU/'
+  let g:make = 'make'
+endif
+call neobundle#begin(expand('~/.vim/bundle/'))
+" -- NeoBundles ----------------------------------------------------------------
+NeoBundle 'scrooloose/nerdtree'
+  let NERDTreeWinPos="left"
+  let NERDTreeWinSize=30
+  let NERDTreeIgnore=['\.pyc$', '\.gcov$', '\.gcda$', '\.gcno$']
+  silent! nmap <silent> <leader>p :NERDTreeToggle<CR>
+NeoBundle 'altercation/vim-colors-solarized'
+  set background=dark
+  command! Dark :set background=dark | colorscheme solarized
+  command! Light :set background=light | colorscheme solarized
+  " TODO
+  " cd ~/.vim/bundle/YouCompleteMe
+  " ./install.sh --clang-completer
+NeoBundle 'ervandew/supertab'
+NeoBundle 'mattn/emmet-vim'
+NeoBundle 'tpope/vim-rails'
+  "TODO change this
+  command! -bar -nargs=1 OpenURL :!chromium <args>
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'kien/ctrlp.vim'
+  let g:ctrlp_working_path_mode=2
+  let g:ctrlp_user_command=['.git/', 'cd %s && git ls-files']
+NeoBundle 'vim-scripts/Tab-Name'
+NeoBundle 'vim-scripts/L9'
+NeoBundle 'aaronbieber/quicktask'
+NeoBundle 'scrooloose/nerdcommenter'
+" File types ----------------------------------------------------------------
+NeoBundle 'jnwhiteh/vim-golang'
+NeoBundle 'tpope/vim-markdown'
+NeoBundle 'tpope/vim-haml'
+NeoBundle 'tpope/vim-markdown'
+NeoBundle 'derekwyatt/vim-scala'
+NeoBundle 'depuracao/vim-rdoc'
+NeoBundle 'derekwyatt/vim-scala'
+NeoBundle 'vim-ruby/vim-ruby'
+NeoBundle 'briancollins/vim-jst'
+NeoBundle 'digitaltoad/vim-jade'
+NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'jeroenbourgois/vim-actionscript'
+NeoBundle 'dag/vim2hs'
+  let g:haddock_browser='/usr/bin/chromium'
+  let g:ghc='/usr/bin/ghc'
+NeoBundle 'elixir-lang/vim-elixir'
+NeoBundle 'Shougo/vimproc.vim', {'build': {'unix': g:make}}
+NeoBundle 'Shougo/unite.vim'
+call neobundle#end()
+" -- finished neobundle bootstrapping -----------------------------------------
+colorscheme solarized
 filetype plugin indent on       "required
+NeoBundleCheck
 " -- Basic stuff --------------------------------------------------------------
 syntax on
 set modelines=0                 "http://www.guninski.com/vim1.html
