@@ -10,8 +10,7 @@
 
 [user]
   name  = TJ Koblentz
-  email = tj@brightroll.com
-  # SigningKey = _@tjk.me
+  email = tj.koblentz@gmail.com
 
 [diff]
   renames = true

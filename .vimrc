@@ -135,6 +135,8 @@ set wildmode=list:longest       "cmdline tab completion similar to bash
 set wildignore=*.o,*.obj,*~     "stuff to ignore when tab completing
 set formatoptions-=o            "dont continue comments when pushing o/O
 set laststatus=2                "always show status bar
+" -- Yank operations go to clipboard! -----------------------------------------
+set clipboard=unnamed
 " -- Key mappings -------------------------------------------------------------
 "" careful about comments in this section as they mess up map commands
 nnoremap ; :

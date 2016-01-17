@@ -1,6 +1,6 @@
 *.DS_Store
 *~
-*.sw*
+*.swp
 *.pyc
 .bundle
 *.dSYM
