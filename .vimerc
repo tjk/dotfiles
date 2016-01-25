@@ -1,5 +1,0 @@
-source ~/.vimrc
-set nobk
-set noswf
-set nowb
-set cm=blowfish
