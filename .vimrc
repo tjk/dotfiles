@@ -66,7 +66,13 @@ NeoBundle 'dag/vim2hs'
   let g:haddock_browser='/usr/bin/chromium'
   let g:ghc='/usr/bin/ghc'
 NeoBundle 'elixir-lang/vim-elixir'
-NeoBundle 'Shougo/vimproc.vim', {'build': {'unix': g:make}}
+NeoBundle 'Shougo/vimproc.vim', {
+\   'build': {
+\     'linux': 'make',
+\     'mac': 'make',
+\     'unix': 'gmake',
+\   }
+\ }
 NeoBundle 'Shougo/unite.vim'
 call neobundle#end()
 " -- finished neobundle bootstrapping -----------------------------------------
