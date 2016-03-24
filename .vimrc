@@ -22,6 +22,7 @@ if system('uname -o') =~ '^GNU/'
   let g:make = 'make'
 endif
 call neobundle#begin(expand('~/.vim/bundle/'))
+NeoBundleFetch 'Shougo/neobundle.vim'
 " -- NeoBundles ----------------------------------------------------------------
 NeoBundle 'scrooloose/nerdtree'
   let NERDTreeWinPos="left"
@@ -50,7 +51,7 @@ NeoBundle 'vim-scripts/L9'
 NeoBundle 'aaronbieber/quicktask'
 NeoBundle 'scrooloose/nerdcommenter'
 " File types ----------------------------------------------------------------
-NeoBundle 'jnwhiteh/vim-golang'
+NeoBundle 'fatih/vim-go'
 NeoBundle 'tpope/vim-markdown'
 NeoBundle 'tpope/vim-haml'
 NeoBundle 'tpope/vim-markdown'
@@ -113,8 +114,9 @@ set clipboard=unnamed           "yank/delete to system clipboard by default
   " let &t_EI=""
 " endif
 " -- Indentation --------------------------------------------------------------
-set tw=79 sw=2 sts=2
-set expandtab
+"TODO check back whether not always enforcing this fits needs better
+"set tw=79 sw=2 sts=2
+"set expandtab
 set smarttab                    "intelligent tab + backspace
 set autoindent                  "use current indent level for next line
 set smartindent                 "intelligent guess at next line's indent
