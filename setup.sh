@@ -10,6 +10,7 @@ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 files=(vimrc aliases gitignore gitconfig)
 for file in ${files[@]}
 do
+  rm $HOME/.$file
   ln -vs $SCRIPTPATH/.$file $HOME/.$file
 done
 
