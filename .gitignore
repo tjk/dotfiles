@@ -5,3 +5,5 @@
 .bundle
 *.dSYM
 .sass-cache
+
+nvim/.netrwhist
