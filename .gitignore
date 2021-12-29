@@ -6,4 +6,4 @@
 *.dSYM
 .sass-cache
 
-nvim/.netrwhist
+nvim/.config/nvim/.netrwhist

@@ -1,0 +1,18 @@
+{
+	"coc.preferences.extensionUpdateCheck": "daily",
+	"coc.preferences.formatOnType": true,
+	"codeLens.enable": true,
+	"diagnostic.checkCurrentLine": true,
+	"diagnostic.enableMessage": "jump",
+	"diagnostic.errorSign": "✖",
+	"diagnostic.hintSign": "•",
+	"diagnostic.infoSign": "•",
+	"diagnostic.virtualText": true,
+	"diagnostic.warningSign": "⚠",
+	"diagnostic-languageserver.mergeConfig": true,
+	"emmet.includeLanguages": { "vue": "jade", "pug": "jade" },
+	"javascript.validate.enable": false,
+	"tailwindCSS.validate": true,
+	"tailwindCSS.emmetCompletions": true,
+	"volar.codeLens.pugTools": true
+}
