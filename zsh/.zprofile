@@ -8,6 +8,7 @@ alias zs='. ~/.zshrc'
 alias gs='git status -sb'
 alias cds='cd ~/src/github.com'
 alias cdpd='cd ~/src/github.com/PipedreamHQ/pipedreamin'
+alias cdd='cd ~/src/github.com/tjk/dotfiles'
 
 # homebrew installs stuff in here
 export PATH="/usr/local/sbin:$PATH"
