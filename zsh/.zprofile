@@ -1,7 +1,6 @@
 # XXX fix a bunch of mac specific stuff in here
 eval "$(ssh-agent -s)"
 
-alias ls='/bin/ls -G'
 alias vi='nvim'
 alias vim='nvim'
 alias ze='vi ~/.zshrc'
