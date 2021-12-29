@@ -1,16 +1,13 @@
 README
 ======
 
-Configuration stuff -- take a look if you'd like. :)
-
 ```
-% # install stow
 % ./setup.sh
 ```
 
-## TODO
+## Dependencies
 
-- on new tmux window use same cwd
+- stow
 
 ## Resources
 
