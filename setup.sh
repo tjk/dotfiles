@@ -20,3 +20,4 @@ sudo chsh -s "$(command -v zsh)" "${USER}"
 brew install zsh-syntax-highlighting
 [ ! -d $OMZ/custom/plugins/zsh-autosuggestions ] && git clone https://github.com/zsh-users/zsh-autosuggestions $OMZ/custom/plugins/zsh-autosuggestions
 [ ! -d $OMZ/themes/powerlevel10k ] && git clone https://github.com/romkatv/powerlevel10k.git $OMZ/themes/powerlevel10k
+brew install ripgrep # for CocList
