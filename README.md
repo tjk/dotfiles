@@ -5,9 +5,10 @@ README
 % ./setup.sh
 ```
 
-## Dependencies
+## Known dependencies (ideally should do what it needs to bootstrap)
 
-- stow
+- curl
+- git
 
 ## Resources
 
