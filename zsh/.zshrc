@@ -92,3 +92,5 @@ export EDITOR='nvim'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
+
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=3"

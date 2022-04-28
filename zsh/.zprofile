@@ -14,7 +14,7 @@ export PATH="/usr/local/sbin:$PATH"
 export LIBRARY_PATH="/usr/local/opt/openssl/lib/:$LIBRARY_PATH"
 
 # setup.sh sets this depending on whether we setup mac or linux
-source $HOME/.zprofile_brew
+export HOMEBREW_NO_AUTO_UPDATE=1
 source $(brew --prefix asdf)/asdf.sh
 
 export PATH="/usr/local/sbin:$PATH"

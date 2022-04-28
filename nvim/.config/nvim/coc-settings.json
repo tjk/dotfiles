@@ -1,6 +1,5 @@
 {
 	"coc.preferences.extensionUpdateCheck": "daily",
-	"coc.preferences.formatOnType": true,
 	"codeLens.enable": true,
 	"diagnostic.checkCurrentLine": true,
 	"diagnostic.enableMessage": "jump",
