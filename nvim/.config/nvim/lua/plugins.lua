@@ -47,7 +47,11 @@ packer.startup(function(use)
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true },
     config = function()
-      require('lualine').setup({})
+      require('lualine').setup({
+        options = {
+          globalstatus = true,
+        },
+      })
     end,
   }
   use {
@@ -94,7 +98,14 @@ packer.startup(function(use)
     'JoosepAlviste/nvim-ts-context-commentstring',
     after = 'nvim-treesitter',
   }
-  use { 'altercation/vim-colors-solarized' }
+  use {
+    'altercation/vim-colors-solarized',
+    config = function()
+      if _G.colorscheme == 'solarized' then
+        vim.cmd([[ colorscheme solarized ]])
+      end
+    end,
+  }
   use { 'simrat39/symbols-outline.nvim' }
   -- use {
   --   'jose-elias-alvarez/null-ls.nvim',
@@ -126,9 +137,23 @@ packer.startup(function(use)
       require('plugins.toggleterm')
     end,
   }
+  -- TODO this might not work properly for , leader? ,gd etc. not being shown :|
+  -- use {
+  --   'folke/which-key.nvim',
+  --   config = function()
+  --     require('which-key').setup({})
+  --   end
+  -- }
+  use {
+    'folke/tokyonight.nvim',
+    config = function()
+      if _G.colorscheme == 'tokyonight' then
+        vim.cmd([[ colorscheme tokyonight ]])
+      end
+    end,
+  }
 
   -- Automatically set up your configuration after cloning packer.nvim
-  -- Put this at the end after all plugins
   if Packer_bootstrap then
     packer.sync()
   end

@@ -36,24 +36,24 @@ vim.opt.smartindent = true
 -- lesser known stuff...
 vim.opt.lazyredraw = true
 
-local opts = { noremap = true, silent = true }
+local opts = { noremap = true }
 
-vim.api.nvim_set_keymap('n', '<leader>/', ':silent nohls<CR>', opts)
-vim.api.nvim_set_keymap('n', '<leader>p', ':Neotree toggle<CR>', opts)
-vim.api.nvim_set_keymap('n', '<c-p>', ':Neotree toggle<CR>', opts)
-vim.api.nvim_set_keymap('n', '<leader>ev', ':e ~/.config/nvim/init.lua<CR>', opts)
-vim.api.nvim_set_keymap('n', '<leader>sv', ':source ~/.config/nvim/init.lua<CR>', opts)
+vim.api.nvim_set_keymap('n', '<Leader>/', ':silent nohls<CR>', opts)
+vim.api.nvim_set_keymap('n', '<Leader>ev', ':e $MYVIMRC<CR>', opts)
+vim.api.nvim_set_keymap('n', '<Leader>sv', ':luafile $MYVIMRC<CR>', opts)
+vim.api.nvim_set_keymap('n', '<Leader>s.', ':luafile %<CR>', opts)
 
 -- TODO
 -- noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 -- noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
-vim.api.nvim_set_keymap('n', '<c-h>', '<c-w>h', opts)
-vim.api.nvim_set_keymap('n', '<c-j>', '<c-w>j', opts)
-vim.api.nvim_set_keymap('n', '<c-k>', '<c-w>k', opts)
-vim.api.nvim_set_keymap('n', '<c-l>', '<c-w>l', opts)
+vim.api.nvim_set_keymap('n', '<C-h>', '<C-w>h', opts)
+vim.api.nvim_set_keymap('n', '<C-j>', '<C-w>j', opts)
+vim.api.nvim_set_keymap('n', '<C-k>', '<C-w>k', opts)
+vim.api.nvim_set_keymap('n', '<C-l>', '<C-w>l', opts)
 
-vim.api.nvim_command([[colorscheme solarized]])
-vim.opt.background = 'light'
+_G.colorscheme = 'tokyonight'
+-- _G.colorscheme = 'solarized'
+-- vim.opt.background = 'light'
 
 require('plugins')
