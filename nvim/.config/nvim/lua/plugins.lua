@@ -15,7 +15,13 @@ vim.cmd([[
 local packer = require('packer')
 
 packer.startup(function(use)
-  use { 'wbthomason/packer.nvim' }
+  use {
+    'wbthomason/packer.nvim',
+    config = function()
+      vim.api.nvim_set_keymap('n', '<Leader>pi', ':PackerInstall<CR>', {})
+      vim.api.nvim_set_keymap('n', '<Leader>ps', ':PackerSync<CR>', {})
+    end,
+  }
   use { 'lewis6991/impatient.nvim' }
   use {
     'williamboman/nvim-lsp-installer',
@@ -106,7 +112,13 @@ packer.startup(function(use)
       end
     end,
   }
-  use { 'simrat39/symbols-outline.nvim' }
+  use {
+    'simrat39/symbols-outline.nvim',
+    config = function()
+      vim.api.nvim_set_keymap('n', '<Leader>so', ':SymbolsOutlineOpen<CR>', {})
+      vim.api.nvim_set_keymap('n', '<Leader>sc', ':SymbolsOutlineClose<CR>', {})
+    end,
+  }
   -- use {
   --   'jose-elias-alvarez/null-ls.nvim',
   --   event = { 'BufRead', 'BufNewFile' },
