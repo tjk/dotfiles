@@ -38,6 +38,7 @@ end
 
 vim.cmd [[ autocmd BufWritePre * lua vim.lsp.buf.formatting_sync() ]]
 
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 local lspconfig = require('lspconfig')
 
 -- lua (https://github.com/sumneko/lua-language-server/wiki/Build-and-Run)

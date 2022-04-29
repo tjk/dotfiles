@@ -28,7 +28,9 @@ packer.startup(function(use)
     after = 'nvim-lspconfig',
     event = 'BufWinEnter',
     config = function()
-      require('plugins/lsp-installer')
+      require('nvim-lsp-installer').setup({
+        automatic_installation = true,
+      })
     end,
   }
   use {
@@ -49,6 +51,7 @@ packer.startup(function(use)
       require('plugins/neo-tree')
     end,
   }
+  use { 'arkav/lualine-lsp-progress' }
   use {
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true },
@@ -56,6 +59,11 @@ packer.startup(function(use)
       require('lualine').setup({
         options = {
           globalstatus = true,
+        },
+        sections = {
+          lualine_c = {
+            'lsp_progress',
+          },
         },
       })
     end,
