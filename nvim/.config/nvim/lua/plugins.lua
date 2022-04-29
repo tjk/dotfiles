@@ -17,8 +17,20 @@ local packer = require('packer')
 packer.startup(function(use)
   use { 'wbthomason/packer.nvim' }
   use { 'lewis6991/impatient.nvim' }
-  use { 'williamboman/nvim-lsp-installer' }
-  use { 'neovim/nvim-lspconfig' }
+  use { 
+    'williamboman/nvim-lsp-installer',
+    after = 'nvim-lspconfig',
+    event = 'BufWinEnter',
+    config = function()
+      require('plugins/lsp-installer')
+    end,
+  }
+  use { 
+    'neovim/nvim-lspconfig',
+    config = function()
+      require('plugins/lsp')
+    end,
+  }
   use {
     'nvim-neo-tree/neo-tree.nvim',
     branch = 'v2.x',
@@ -26,25 +38,49 @@ packer.startup(function(use)
       'nvim-lua/plenary.nvim',
       'kyazdani42/nvim-web-devicons',
       'MunifTanjim/nui.nvim',
-    }
+    },
+    config = function()
+      require('plugins/neo-tree')
+    end,
   }
   use { 
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true },
     config = function()
-      require('lualine').setup()
+      require('lualine').setup({})
     end,
   }
-  use { 'hrsh7th/nvim-cmp' }
-  use { 'hrsh7th/cmp-nvim-lsp' }
-  use { 'hrsh7th/cmp-buffer' }
-  use { 'hrsh7th/cmp-path' }
+  use { 
+    'hrsh7th/nvim-cmp',
+    event = 'InsertEnter',
+    config = function() 
+      require('plugins.cmp')
+    end,
+  }
+  use { 
+    'hrsh7th/cmp-nvim-lsp',
+    after = "nvim-cmp",
+  }
+  use {
+    'hrsh7th/cmp-buffer',
+    after = 'nvim-cmp',
+  }
+  use {
+    'hrsh7th/cmp-path',
+    after = 'nvim-cmp',
+  }
   use { 'hrsh7th/cmp-cmdline' }
   use { 'L3MON4D3/LuaSnip' }
-  use { 'saadparwaiz1/cmp_luasnip' }
+  use {
+    'saadparwaiz1/cmp_luasnip',
+    after = 'nvim-cmp',
+  }
   use {
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate',
+    config = function()
+      require('plugins/treesitter')
+    end,
   }
   use { 
     'p00f/nvim-ts-rainbow',
@@ -69,7 +105,19 @@ packer.startup(function(use)
     'lewis6991/gitsigns.nvim',
     event = { "BufRead", "BufNewFile" },
     config = function()
-      require('gitsigns').setup()
+      require('gitsigns').setup({})
+    end,
+  }
+  use { 
+    'nvim-telescope/telescope.nvim',
+    requires = { 'nvim-lua/plenary.nvim' }
+  }
+  use {
+    ('nvim-telescope/telescope-%s-native.nvim'):format(vim.fn.has 'win32' == 1 and 'fzy' or 'fzf'),
+    after = 'telescope.nvim',
+    run = 'make',
+    config = function()
+      require('plugins.telescope')
     end,
   }
   -- TODO 'akinsho/nvim-toggleterm.lua'

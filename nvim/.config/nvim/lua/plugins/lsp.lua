@@ -61,10 +61,10 @@ lspconfig.sumneko_lua.setup {
 }
 
 -- javascript / typescript
-lspconfig.tsserver.setup {
-  on_attach = on_attach,
-  root_dir = vim.loop.cwd,
-}
+-- lspconfig.tsserver.setup {
+--   on_attach = on_attach,
+--   root_dir = vim.loop.cwd,
+-- }
 
 -- ruby
 lspconfig.solargraph.setup {
@@ -83,4 +83,6 @@ lspconfig.jsonls.setup {
 
 lspconfig.volar.setup {
   on_attach = on_attach,
+  -- "take over mode" (https://github.com/johnsoncodehk/volar/discussions/471)
+  filetypes = {'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json'}
 }

@@ -40,6 +40,7 @@ local opts = { noremap = true, silent = true }
 
 vim.api.nvim_set_keymap('n', '<leader>/', ':silent nohls<CR>', opts)
 vim.api.nvim_set_keymap('n', '<leader>p', ':Neotree toggle<CR>', opts)
+vim.api.nvim_set_keymap('n', '<c-p>', ':Neotree toggle<CR>', opts)
 vim.api.nvim_set_keymap('n', '<leader>ev', ':e ~/.config/nvim/init.lua<CR>', opts)
 vim.api.nvim_set_keymap('n', '<leader>sv', ':source ~/.config/nvim/init.lua<CR>', opts)
 
@@ -56,8 +57,3 @@ vim.api.nvim_command([[colorscheme solarized]])
 vim.opt.background = 'light'
 
 require('plugins')
-require('plugins/cmp')
-require('plugins/lsp')
-require('plugins/lsp-installer')
-require('plugins/neo-tree')
-require('plugins/treesitter')
