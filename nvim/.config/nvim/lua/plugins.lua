@@ -1,8 +1,8 @@
 -- https://github.com/wbthomason/packer.nvim#bootstrapping
 local fn = vim.fn
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
-  Packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+  Packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
 end
 
 vim.cmd([[
@@ -17,7 +17,7 @@ local packer = require('packer')
 packer.startup(function(use)
   use { 'wbthomason/packer.nvim' }
   use { 'lewis6991/impatient.nvim' }
-  use { 
+  use {
     'williamboman/nvim-lsp-installer',
     after = 'nvim-lspconfig',
     event = 'BufWinEnter',
@@ -25,7 +25,7 @@ packer.startup(function(use)
       require('plugins/lsp-installer')
     end,
   }
-  use { 
+  use {
     'neovim/nvim-lspconfig',
     config = function()
       require('plugins/lsp')
@@ -43,21 +43,21 @@ packer.startup(function(use)
       require('plugins/neo-tree')
     end,
   }
-  use { 
+  use {
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true },
     config = function()
       require('lualine').setup({})
     end,
   }
-  use { 
+  use {
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
-    config = function() 
+    config = function()
       require('plugins.cmp')
     end,
   }
-  use { 
+  use {
     'hrsh7th/cmp-nvim-lsp',
     after = "nvim-cmp",
   }
@@ -82,33 +82,33 @@ packer.startup(function(use)
       require('plugins/treesitter')
     end,
   }
-  use { 
+  use {
     'p00f/nvim-ts-rainbow',
     after = 'nvim-treesitter',
   }
-  use { 
+  use {
     'windwp/nvim-ts-autotag',
     after = 'nvim-treesitter',
   }
-  use { 
+  use {
     'JoosepAlviste/nvim-ts-context-commentstring',
     after = 'nvim-treesitter',
   }
   use { 'altercation/vim-colors-solarized' }
   use { 'simrat39/symbols-outline.nvim' }
-  use { 
-    'jose-elias-alvarez/null-ls.nvim',
-    event = { 'BufRead', 'BufNewFile' },
-  }
+  -- use {
+  --   'jose-elias-alvarez/null-ls.nvim',
+  --   event = { 'BufRead', 'BufNewFile' },
+  -- }
   use { 'b0o/schemastore.nvim' }
-  use { 
+  use {
     'lewis6991/gitsigns.nvim',
     event = { "BufRead", "BufNewFile" },
     config = function()
       require('gitsigns').setup({})
     end,
   }
-  use { 
+  use {
     'nvim-telescope/telescope.nvim',
     requires = { 'nvim-lua/plenary.nvim' }
   }
@@ -120,7 +120,12 @@ packer.startup(function(use)
       require('plugins.telescope')
     end,
   }
-  -- TODO 'akinsho/nvim-toggleterm.lua'
+  use {
+    'akinsho/nvim-toggleterm.lua',
+    config = function()
+      require('plugins.toggleterm')
+    end,
+  }
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

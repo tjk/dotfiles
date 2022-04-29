@@ -1,6 +1,7 @@
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 require('nvim-lsp-installer').setup {
-  ensure_installed = { 
+  ensure_installed = {
+    'gopls',
     'jsonls', -- npm i -g vscode-json-languageserver
     'solargraph',
     'sumneko_lua',
