@@ -1,4 +1,4 @@
-local null_ls = require('null-ls')
+-- local null_ls = require('null-ls')
 
 -- vim.lsp.set_log_level("debug")
 
