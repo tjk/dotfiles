@@ -94,3 +94,35 @@ export EDITOR='nvim'
 # export ARCHFLAGS="-arch x86_64"
 
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=3"
+
+### my custom stuff
+
+# XXX fix a bunch of mac specific stuff in here
+alias vi='nvim'
+alias vim='nvim'
+alias ze="nvim $HOME/.zshrc"
+alias zs=". $HOME/.zshrc"
+alias gs='git status -sb'
+alias cds="cd $HOME/src/github.com"
+alias cdpd="cd $HOME/src/github.com/PipedreamHQ/pipedreamin"
+alias cdd="cd $HOME/src/github.com/tjk/dotfiles"
+
+export PATH="/usr/local/sbin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$PATH:$HOME/Library/Python/3.9/bin"
+export PATH="$PATH:$HOME/src/github.com/sumneko/lua-language-server/bin"
+
+# fixes mysql2 gem installation (https://github.com/brianmario/mysql2/issues/795#issuecomment-655885415)
+export LIBRARY_PATH="/usr/local/opt/openssl/lib/:$LIBRARY_PATH"
+
+source $HOME/.zprofile_brew
+export PATH="$(brew --prefix)/bin:$(brew --prefix)/sbin:$PATH"
+export HOMEBREW_NO_AUTO_UPDATE=1
+
+source $(brew --prefix asdf)/asdf.sh
+
+source $(brew --prefix zsh-syntax-highlighting)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
