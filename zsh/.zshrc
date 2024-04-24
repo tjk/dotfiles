@@ -106,6 +106,7 @@ alias gs='git status -sb'
 alias cds="cd $HOME/src/github.com"
 alias cdpd="cd $HOME/src/github.com/PipedreamHQ/pipedreamin"
 alias cdd="cd $HOME/src/github.com/tjk/dotfiles"
+alias ag="rg"
 
 export PATH="/usr/local/sbin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
@@ -119,10 +120,18 @@ source $HOME/.zprofile_brew
 export PATH="$(brew --prefix)/bin:$(brew --prefix)/sbin:$PATH"
 export HOMEBREW_NO_AUTO_UPDATE=1
 
-source $(brew --prefix asdf)/asdf.sh
+source $(brew --prefix asdf)/libexec/asdf.sh
 
 source $(brew --prefix zsh-syntax-highlighting)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# bun completions
+[ -s "/home/tj/.bun/_bun" ] && source "/home/tj/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+PATH=~/.console-ninja/.bin:$PATH
