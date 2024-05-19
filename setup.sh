@@ -8,7 +8,6 @@ install_brew() {
 	source ~/.zprofile_brew
 }
 which brew || install_brew
-which stow || brew install stow
 
 CONFIG=$HOME/.config
 
@@ -19,8 +18,7 @@ ln -sf $(pwd)/gitignore $HOME/.gitignore
 ln -sf $(pwd)/gitconfig $HOME/.gitconfig
 
 # nvim
-mkdir -p $CONFIG/nvim
-stow --restow --target=$CONFIG/nvim nvim
+ln -sf $(pwd)/nvim $CONFIG/nvim
 
 # tmux
 ln -sf $(pwd)/tmux.conf $CONFIG/.tmux.conf
