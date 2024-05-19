@@ -1,2 +1,0 @@
-- fix flicker on open files sometimes
-- move packer_compiled out?

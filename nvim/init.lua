@@ -509,7 +509,7 @@ require("lazy").setup({
 				},
 				-- [tjk]
 				volar = {
-					filetypes = { "javascript", "typescript", "typescriptreact", "javascriptreact", "vue" },
+					filetypes = { "vue" },
 					init_options = {
 						vue = {
 							hybridMode = false,

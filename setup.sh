@@ -9,10 +9,26 @@ install_brew() {
 }
 which brew || install_brew
 which stow || brew install stow
-stow --restow --target=$HOME git
-stow --restow --target=$HOME nvim
-stow --restow --target=$HOME tmux
-stow --restow --target=$HOME zsh
+
+CONFIG=$HOME/.config
+
+mkdir -p $CONFIG
+
+# git
+ln -sf $(pwd)/gitignore $HOME/.gitignore
+ln -sf $(pwd)/gitconfig $HOME/.gitconfig
+
+# nvim
+mkdir -p $CONFIG/nvim
+stow --restow --target=$CONFIG/nvim nvim
+
+# tmux
+ln -sf $(pwd)/tmux.conf $CONFIG/.tmux.conf
+
+# zsh
+ln -sf $(pwd)/zshrc $HOME/.zshrc
+ln -sf $(pwd)/p10k.zsh $HOME/.p10k.zsh
+
 OMZ="$HOME/.oh-my-zsh"
 [ ! -d "$OMZ" ] && CHSH=no RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 command -v zsh | sudo tee -a /etc/shells
