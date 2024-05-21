@@ -456,9 +456,11 @@ require("lazy").setup({
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
+			local lspconfig = require("lspconfig")
+
 			-- local mason_registry = require("mason-registry")
-			-- local vue_language_server_path = mason_registry.get_package("vue-language-server"):get_install_path()
-			-- 	.. "/node_modules/@vue/language-server"
+			-- local vue_language_server_path = mason_registry.get_package("vue-language-server"):get_install_path() .. "/node_modules/@vue/language-server"
+			local vue_language_server_path = "/home/tj/.local/share/pnpm/global/5/node_modules/@vue/language-server"
 
 			-- Enable the following language servers
 			--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -471,7 +473,11 @@ require("lazy").setup({
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
 				-- clangd = {},
-				-- gopls = {},
+				gopls = {
+					root_dir = function(fname)
+						return lspconfig.util.root_pattern("go.mod", ".git")(fname) or vim.fn.getcwd()
+					end,
+				},
 				-- pyright = {},
 				-- rust_analyzer = {},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -480,18 +486,23 @@ require("lazy").setup({
 				--    https://github.com/pmizio/typescript-tools.nvim
 				--
 				-- But for many setups, the LSP (`tsserver`) will work just fine
-				-- tsserver = {
-				-- 	init_options = {
-				-- 		plugins = {
-				-- 			{
-				-- 				name = "@vue/typescript-plugin",
-				-- 				location = vue_language_server_path,
-				-- 				languages = { "vue" },
-				-- 			},
-				-- 		},
-				-- 	},
-				-- 	filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
-				-- },
+				tsserver = {
+					root_dir = function(fname)
+						return lspconfig.util.root_pattern("tsconfig.json")(fname)
+							or lspconfig.util.root_pattern("package.json", "jsconfig.json", ".git")(fname)
+							or vim.fn.getcwd()
+					end,
+					init_options = {
+						plugins = {
+							{
+								name = "@vue/typescript-plugin",
+								location = vue_language_server_path,
+								languages = { "javascript", "typescript", "vue" },
+							},
+						},
+					},
+					filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+				},
 
 				lua_ls = {
 					-- cmd = {...},
@@ -508,18 +519,85 @@ require("lazy").setup({
 					},
 				},
 				-- [tjk]
-				volar = {
-					filetypes = { "vue" },
-					init_options = {
-						vue = {
-							hybridMode = false,
-						},
-						typescript = {
-							tsdk = vim.fn.getcwd() .. "/node_modules/typescript/lib",
-							-- tsdk = "~/src/github.com/PipedreamHQ/pipedreamin/frontend-next/node_modules/typescript/lib",
+				volar = {},
+				jsonls = {
+					settings = {
+						json = {
+							-- Schemas https://www.schemastore.org
+							schemas = {
+								{
+									fileMatch = { "package.json" },
+									url = "https://json.schemastore.org/package.json",
+								},
+								{
+									fileMatch = { "tsconfig*.json" },
+									url = "https://json.schemastore.org/tsconfig.json",
+								},
+								{
+									fileMatch = {
+										".prettierrc",
+										".prettierrc.json",
+										"prettier.config.json",
+									},
+									url = "https://json.schemastore.org/prettierrc.json",
+								},
+								{
+									fileMatch = { ".eslintrc", ".eslintrc.json" },
+									url = "https://json.schemastore.org/eslintrc.json",
+								},
+								{
+									fileMatch = { ".babelrc", ".babelrc.json", "babel.config.json" },
+									url = "https://json.schemastore.org/babelrc.json",
+								},
+								{
+									fileMatch = { "lerna.json" },
+									url = "https://json.schemastore.org/lerna.json",
+								},
+								{
+									fileMatch = { "now.json", "vercel.json" },
+									url = "https://json.schemastore.org/now.json",
+								},
+								{
+									fileMatch = {
+										".stylelintrc",
+										".stylelintrc.json",
+										"stylelint.config.json",
+									},
+									url = "http://json.schemastore.org/stylelintrc.json",
+								},
+							},
 						},
 					},
 				},
+				yamlls = {
+					settings = {
+						yaml = {
+							-- Schemas https://www.schemastore.org
+							schemas = {
+								["http://json.schemastore.org/gitlab-ci.json"] = { ".gitlab-ci.yml" },
+								["https://json.schemastore.org/bamboo-spec.json"] = {
+									"bamboo-specs/*.{yml,yaml}",
+								},
+								["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = {
+									"docker-compose*.{yml,yaml}",
+								},
+								["http://json.schemastore.org/github-workflow.json"] = ".github/workflows/*.{yml,yaml}",
+								["http://json.schemastore.org/github-action.json"] = ".github/action.{yml,yaml}",
+								["http://json.schemastore.org/prettierrc.json"] = ".prettierrc.{yml,yaml}",
+								["http://json.schemastore.org/stylelintrc.json"] = ".stylelintrc.{yml,yaml}",
+								["http://json.schemastore.org/circleciconfig"] = ".circleci/**/*.{yml,yaml}",
+							},
+						},
+					},
+				},
+
+				-- ccls = {
+				-- 	init_options = {
+				-- 		cache = {
+				-- 			directory = ".ccls-cache",
+				-- 		},
+				-- 	},
+				-- },
 			}
 
 			-- Ensure the servers and tools above are installed
@@ -544,13 +622,7 @@ require("lazy").setup({
 			-- 	border = borderLsp,
 			-- })
 			-- tsserver is messing up formatting
-			vim.lsp.buf.format({
-				filter = function(client)
-					return client.name ~= "tsserver"
-				end,
-			})
 
-			local lspconfig = require("lspconfig")
 			require("mason-lspconfig").setup({
 				handlers = {
 					function(server_name)
