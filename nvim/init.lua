@@ -911,11 +911,7 @@ require("lazy").setup({
 		end,
 	},
 	{
-		"echasnovski/mini.pairs",
-		version = "*",
-		config = function()
-			require("mini.pairs").setup()
-		end,
+		"jiangmiao/auto-pairs",
 	},
 	{
 		"nvim-tree/nvim-tree.lua",
