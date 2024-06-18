@@ -21,7 +21,7 @@ ln -sf $(pwd)/gitconfig $HOME/.gitconfig
 ln -sf $(pwd)/nvim $CONFIG/nvim
 
 # tmux
-ln -sf $(pwd)/tmux.conf $CONFIG/.tmux.conf
+ln -sf $(pwd)/tmux.conf $HOME/.tmux.conf
 
 # zsh
 ln -sf $(pwd)/zshrc $HOME/.zshrc
