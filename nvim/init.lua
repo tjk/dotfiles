@@ -466,7 +466,9 @@ require("lazy").setup({
 
 			-- local mason_registry = require("mason-registry")
 			-- local vue_language_server_path = mason_registry.get_package("vue-language-server"):get_install_path() .. "/node_modules/@vue/language-server"
-			local vue_language_server_path = "/home/tj/.local/share/pnpm/global/5/node_modules/@vue/language-server"
+			-- local vue_language_server_path = "/home/tj/.local/share/pnpm/global/5/node_modules/@vue/language-server"
+			local vue_language_server_path =
+				"/Users/tj/.asdf/installs/nodejs/18.16.0/.npm/lib/node_modules/@vue/language-server"
 
 			-- Enable the following language servers
 			--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -507,7 +509,7 @@ require("lazy").setup({
 							},
 						},
 					},
-					filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+					filetypes = { "javascript", "typescript", "vue" },
 				},
 
 				lua_ls = {
