@@ -73,7 +73,7 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 
-exec mako
+exec mako --font "FiraCodeNerdFont 14"
 exec_always nm-applet --indicator
 bar {
   swaybar_command waybar
@@ -85,32 +85,33 @@ input "type:keyboard" {
 
 # gruvbox theme
 # adapted from https://gist.github.com/daboross/15a54c086b1c20e9ccc8878cdac65838
-set $color_bg #282828
-set $color_bg1 #3c3836
-set $color_bg2 #504945
-set $color_bg3 #665c54
-set $color_bg4 #7c6f64
-set $color_fb #ebdbb2
-set $color_aqua #8ec07c
-set $color_blue #83a598
-set $color_light_bg #fbf1c7
-set $color_light_fg #3c3836
-set $color_normal_white  #a89984
-set $color_bright_white  #ebdbb2
-set $color_normal_gray   #282828
-set $color_bright_gray   #3c3836
-set $color_bright_yellow #d79921
-set $color_normal_black  #1d2021
-set $color_unused        #ff0000
+set $bg #282828
+set $bg1 #3c3836
+set $bg2 #504945
+set $bg3 #665c54
+set $bg4 #7c6f64
+set $fb #ebdbb2
+set $aqua #8ec07c
+set $blue #83a598
+set $light_bg #fbf1c7
+set $light_fg #3c3836
+set $normal_white #a89984
+set $bright_white #ebdbb2
+set $normal_gray #282828
+set $bright_gray #3c3836
+set $yellow #d79921
+set $normal_black #1d2021
+set $unused #ff0000
 
-# Colors                  border        background             text                   indicator            child_border
-client.focused            $color_bg2    $color_bg2             $color_bright_white    $color_bright_yellow $color_normal_black
-client.focused_inactive   $color_bg1    $color_bg1             $color_normal_white    $color_bright_yellow $color_normal_black
-client.unfocused          $color_bg     $color_bg              $color_normal_white    $color_normal_gray   $color_normal_black
-client.urgent             $color_bg     $color_light_bg        $color_light_fg        $color_unused        $color_unused
-client.placeholder        $color_bg     $color_unused          $color_unused          $color_unused        $color_unused
+# Colors                  border  bg        text           indicator     child_border
+client.focused            $blue   $bg2      $bright_white  $yellow       $blue
+client.focused_inactive   $bg1    $bg1      $normal_white  $yellow       $normal_black
+client.unfocused          $bg     $bg       $normal_white  $normal_gray  $normal_black
+client.urgent             $bg     $light_bg $light_fg      $unused       $unused
+client.placeholder        $bg     $unused   $unused        $unused       $unused
 
-default_border normal 2
+# disable title bar
+default_border pixel 2
 
 # -- review everything below --
 
