@@ -30,17 +30,18 @@ pkgs+=("protobuf-compiler" "golang-google-protobuf")
 pkgs+=("golang-misc")
 
 sudo rpm --import https://downloads.1password.com/linux/keys/1password.asc
-ls /etc/yum.repos.d/1password.repo >/dev/null 2>/dev/null || sudo sh -c 'echo -e "[1password]\nname=1Password Stable Channel\nbaseurl=https://downloads.1password.com/linux/rpm/stable/\$basearch\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=\"https://downloads.1password.com/linux/keys/1password.asc\"" > /etc/yum.repos.d/1password.repo'
+test -e /etc/yum.repos.d/1password.repo || sudo sh -c 'echo -e "[1password]\nname=1Password Stable Channel\nbaseurl=https://downloads.1password.com/linux/rpm/stable/\$basearch\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=\"https://downloads.1password.com/linux/keys/1password.asc\"" > /etc/yum.repos.d/1password.repo'
 pkgs+=("1password")
 
 # NOTE: slack, discord use browser for now
 
 sudo dnf -y install ${pkgs[*]}
 
-# add 1password
-sudo dnf install 1password
-
-
 # fonts
 mkdir -p ~/.local/share/fonts
 ls ~/.local/share/fonts/FiraCodeNerdFont-Regular.ttf >/dev/null 2>/dev/null || (cd ~/.local/share/fonts && curl -fLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf)
+
+# asdf
+test -e ~/.asdf || git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
+# mkdir -p ~/.config/fish/completions
+# ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions

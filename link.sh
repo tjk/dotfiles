@@ -1,7 +1,7 @@
 #!/bin/sh -ex
 
-ls ~/.config/alacritty >/dev/null 2>/dev/null || ln -sf $(pwd)/alacritty ~/.config/alacritty
-ls ~/.config/fish >/dev/null 2>/dev/null || ln -sf $(pwd)/fish ~/.config/fish
-ls ~/.config/nvim >/dev/null 2>/dev/null || ln -sf $(pwd)/nvim ~/.config/nvim
-ls ~/.config/sway >/dev/null 2>/dev/null || ln -sf $(pwd)/sway ~/.config/sway
-ls ~/.config/waybar >/dev/null 2>/dev/null || ln -sf $(pwd)/waybar ~/.config/waybar
+test -e ~/.config/alacritty || ln -sf $(pwd)/alacritty ~/.config/alacritty
+test -e ~/.config/fish || ln -sf $(pwd)/fish ~/.config/fish
+test -e ~/.config/nvim || ln -sf $(pwd)/nvim ~/.config/nvim
+test -e ~/.config/sway || ln -sf $(pwd)/sway ~/.config/sway
+test -e ~/.config/waybar || ln -sf $(pwd)/waybar ~/.config/waybar
