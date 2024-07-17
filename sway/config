@@ -7,6 +7,15 @@ set $up k
 set $right l
 # set $menu dmenu_path | wmenu | xargs swaymsg exec --
 set $menu "rofi -i -modi drun,run,window -show drun"
+set $locak "swaylock -f -c 000000"
+
+font pango:FiraCodeNerdFont Regular 14
+output * bg /usr/share/backgrounds/f40/default/f40-01-night.png fill
+
+exec swayidle -w \
+         timeout 300 $lock \
+         timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+         before-sleep $lock
 
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Do you really want to exit sway?' -B 'Yes, exit sway' 'swaymsg exit'
@@ -73,10 +82,38 @@ input "type:keyboard" {
   xkb_options caps:escape
 }
 
-### Output configuration
-#
-# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+# gruvbox theme
+# adapted from https://gist.github.com/daboross/15a54c086b1c20e9ccc8878cdac65838
+set $color_bg #282828
+set $color_bg1 #3c3836
+set $color_bg2 #504945
+set $color_bg3 #665c54
+set $color_bg4 #7c6f64
+set $color_fb #ebdbb2
+set $color_aqua #8ec07c
+set $color_blue #83a598
+set $color_light_bg #fbf1c7
+set $color_light_fg #3c3836
+set $color_normal_white  #a89984
+set $color_bright_white  #ebdbb2
+set $color_normal_gray   #282828
+set $color_bright_gray   #3c3836
+set $color_bright_yellow #d79921
+set $color_normal_black  #1d2021
+set $color_unused        #ff0000
+
+# Colors                  border        background             text                   indicator            child_border
+client.focused            $color_bg2    $color_bg2             $color_bright_white    $color_bright_gray   $color_normal_black
+client.focused_inactive   $color_bg1    $color_bg1             $color_normal_white    $color_bright_gray   $color_normal_black
+client.unfocused          $color_bg     $color_bg              $color_normal_white    $color_normal_gray   $color_normal_black
+client.urgent             $color_bg     $color_light_bg        $color_light_fg        $color_unused        $color_unused
+client.placeholder        $color_bg     $color_unused          $color_unused          $color_unused        $color_unused
+
+default_border normal 0
+
+
+
+# -- review everything below --
 
 #
 # Example configuration:
@@ -85,18 +122,6 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 
-### Idle configuration
-#
-# Example configuration:
-#
-# exec swayidle -w \
-#          timeout 300 'swaylock -f -c 000000' \
-#          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
-#          before-sleep 'swaylock -f -c 000000'
-#
-# This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 300 seconds, and turn your screens back on when
-# resumed. It will also lock your screen before your computer goes to sleep.
 
 ### Input configuration
 
