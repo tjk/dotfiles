@@ -73,6 +73,7 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 
+exec mako
 exec_always nm-applet --indicator
 bar {
   swaybar_command waybar
@@ -103,15 +104,13 @@ set $color_normal_black  #1d2021
 set $color_unused        #ff0000
 
 # Colors                  border        background             text                   indicator            child_border
-client.focused            $color_bg2    $color_bg2             $color_bright_white    $color_bright_gray   $color_normal_black
-client.focused_inactive   $color_bg1    $color_bg1             $color_normal_white    $color_bright_gray   $color_normal_black
+client.focused            $color_bg2    $color_bg2             $color_bright_white    $color_bright_yellow $color_normal_black
+client.focused_inactive   $color_bg1    $color_bg1             $color_normal_white    $color_bright_yellow $color_normal_black
 client.unfocused          $color_bg     $color_bg              $color_normal_white    $color_normal_gray   $color_normal_black
 client.urgent             $color_bg     $color_light_bg        $color_light_fg        $color_unused        $color_unused
 client.placeholder        $color_bg     $color_unused          $color_unused          $color_unused        $color_unused
 
-default_border normal 0
-
-
+default_border normal 2
 
 # -- review everything below --
 
