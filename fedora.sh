@@ -17,5 +17,7 @@ pkgs+=("sway" "waybar" "rofi")
 # for controlling via sway XF86 keys
 pkgs+=("brightnessctl" "pulseaudio-utils")
 pkgs+=("google-chrome-stable")
+# XXX: check whether golang-x-tools-gopls is included in go
+pkgs+=("go" "golang-x-tools-gopls")
 
-sudo dnf install ${pkgs[*]}
+sudo dnf -y install ${pkgs[*]}
