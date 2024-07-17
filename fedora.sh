@@ -13,7 +13,7 @@ pkgs=()
 pkgs+=("alacritty")
 pkgs+=("fish")
 pkgs+=("eza" "fzf" "neovim" "zoxide")
-pkgs+=("sway" "waybar" "rofi")
+pkgs+=("sway" "waybar" "rofi" "network-manager-applet")
 # for controlling via sway XF86 keys
 pkgs+=("brightnessctl" "pulseaudio-utils")
 pkgs+=("google-chrome-stable")
