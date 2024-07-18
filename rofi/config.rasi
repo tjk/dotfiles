@@ -1,0 +1,13 @@
+configuration {
+  modi: ["drun", "window", "run"];
+  show-icons: true;
+  terminal: "alacritty";
+  drun-display-format: "{icon} {name}";
+  disable-history: false;
+
+  kb-row-up: "Up,Control+p";
+  kb-row-down: "Down,Control+n";
+  kb-accept-entry: "Return,Control+y";
+}
+
+@theme "./tokyonight.rasi"
