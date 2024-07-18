@@ -11,8 +11,8 @@
 pkgs=()
 pkgs+=("alacritty")
 pkgs+=("fish")
-pkgs+=("btop" "eza" "fzf" "neovim" "zoxide")
-pkgs+=("sway" "waybar" "yambar" "rofi" "network-manager-applet" "mako")
+pkgs+=("bat" "btop" "eza" "fzf" "neovim" "zoxide")
+pkgs+=("sway" "waybar" "yambar" "rofi" "network-manager-applet" "mako" "blueman")
 # for controlling via sway XF86 keys
 pkgs+=("brightnessctl" "pulseaudio-utils")
 
@@ -40,8 +40,6 @@ pkgs+=("flameshot")
 
 # light/dark mode + gamma
 pkgs+=("darkman" "gammastep")
-# XXX: cannot get this working... maybe need perms? (TODO: maybe try gammastep ?)
-pkgs+=("redshift")
 
 pkgs+=("powertop")
 
@@ -96,3 +94,6 @@ test -e ~/src/github.com/waycrate/swhkd || \
   make clean && \
   make && \
   sudo make install)
+
+# curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+# fisher install PatrickF1/fzf.fish

@@ -10,12 +10,12 @@
   ],
   "modules-center": [],
   "modules-right": [
-    "idle_inhibitor",
     "memory",
     "battery",
     "pulseaudio",
     "pulseaudio/slider",
     "custom/toggle_scheme",
+    "idle_inhibitor",
     "tray",
     "clock",
   ],

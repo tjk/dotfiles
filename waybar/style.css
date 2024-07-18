@@ -30,11 +30,11 @@ window#waybar.hidden {
   background: #d79921;
 }
 
-#idle_inhibitor {
-  padding-right: 30px;
-}
 #mode, #clock, #battery {
   padding: 0 10px;
+}
+#idle_inhibitor {
+  padding-right: 20px;
 }
 
 #battery {
