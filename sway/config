@@ -73,6 +73,11 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 
+exec gammastep-indicator
+# TODO: fix XDG_CURRENT_DESKTOP not set
+# exec XDG_CURRENT_DESKTOP=sway flameshot
+exec swhks
+exec swhkd
 exec mako --font "FiraCodeNerdFont 14"
 exec_always nm-applet --indicator
 bar {

@@ -3,4 +3,6 @@ if status is-interactive
   fish_vi_key_bindings
   zoxide init --cmd cd fish | source
   source ~/.asdf/asdf.fish
+  # add this for pip
+  fish_add_path ~/.asdf/installs/python/3.10.5/bin
 end

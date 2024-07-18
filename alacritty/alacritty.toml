@@ -1,4 +1,4 @@
-import = ["~/.config/alacritty/themes/themes/gruvbox_dark.toml"]
+import = ["~/.gruvbox_current.toml"]
 
 [font]
 normal={family="FiraCodeNerdFont", style="Regular"}
