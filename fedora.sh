@@ -12,7 +12,7 @@ pkgs=()
 pkgs+=("alacritty")
 pkgs+=("fish")
 pkgs+=("bat" "btop" "eza" "fzf" "neovim" "zoxide")
-pkgs+=("sway" "waybar" "yambar" "rofi" "network-manager-applet" "mako" "blueman")
+pkgs+=("sway" "waybar" "yambar" "rofi" "network-manager-applet" "mako" "blueman" "pavucontrol")
 # for controlling via sway XF86 keys
 pkgs+=("brightnessctl" "pulseaudio-utils")
 
@@ -97,3 +97,8 @@ test -e ~/src/github.com/waycrate/swhkd || \
 
 # curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
 # fisher install PatrickF1/fzf.fish
+
+# in /usr/share/applications/google-chrome.desktop
+# Exec=/usr/bin/google-chrome-stable --force-device-scale-factor=1.5 %U
+
+# cargo install sworkstyle

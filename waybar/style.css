@@ -1,7 +1,8 @@
 /* gruvbox */
 /* @define-color fg #ebdbb2;*/
 /* tokyo */
- @define-color fg #c0caf5; 
+@define-color bg #24283b;
+@define-color fg #c0caf5; 
 /*@define-color fg white;*/
 
 * {
@@ -10,7 +11,7 @@
 }
 
 window#waybar {
-  background: black;
+  background: @bg;
   color: @fg;
 }
 window#waybar.hidden {

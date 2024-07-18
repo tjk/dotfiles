@@ -64,19 +64,22 @@ bindsym $mod+Shift+0 move container to workspace number 10
 
 bindsym $mod+r mode "resize"
 mode "resize" {
-    bindsym $left resize shrink width 10px
-    bindsym $down resize grow height 10px
-    bindsym $up resize shrink height 10px
-    bindsym $right resize grow width 10px
+    bindsym $left resize shrink width 40px
+    bindsym $down resize grow height 40px
+    bindsym $up resize shrink height 40px
+    bindsym $right resize grow width 40px
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
 }
 
+exec sworkstyle &> /tmp/sworkstyle.log
 exec_always --no-startup-id 'blueman-applet'
 exec_always gammastep-indicator
 # TODO: fix XDG_CURRENT_DESKTOP not set
 # exec XDG_CURRENT_DESKTOP=sway flameshot
+# TODO uninstall these now that two finger click
 exec swhks
 exec swhkd
 exec mako --font "FiraCodeNerdFont 14"
@@ -123,6 +126,10 @@ client.placeholder        $bg     $unused   $unused        $unused       $unused
 
 # disable title bar
 default_border pixel 2
+
+for_window [app_id="pavucontrol"] floating enable
+#for_window [app_id="pavucontrol"] move absolute position 1200 41
+for_window [app_id="pavucontrol"] resize set width 1000 height 400
 
 # -- review everything below --
 
