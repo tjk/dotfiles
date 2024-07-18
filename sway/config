@@ -88,7 +88,12 @@ input "type:keyboard" {
   xkb_options caps:escape
 }
 
-# gruvbox theme
+# right click with two fingers instead of far right
+input "type:touchpad" {
+  click_method clickfinger
+}
+
+# gruvbox theme (TODO change these to tokyo?)
 # adapted from https://gist.github.com/daboross/15a54c086b1c20e9ccc8878cdac65838
 set $bg #282828
 set $bg1 #3c3836

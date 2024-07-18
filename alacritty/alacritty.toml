@@ -1,4 +1,4 @@
-import = ["~/.gruvbox_current.toml"]
+import = ["~/.alacritty_theme.toml"]
 
 [font]
 normal={family="FiraCodeNerdFont", style="Regular"}

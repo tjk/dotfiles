@@ -1,3 +1,9 @@
+/* gruvbox */
+/* @define-color fg #ebdbb2;*/
+/* tokyo */
+ @define-color fg #c0caf5; 
+/*@define-color fg white;*/
+
 * {
   font-family: FiraCodeNerdFont;
   font-size: 16px;
@@ -5,7 +11,7 @@
 
 window#waybar {
   background: black;
-  color: #ebdbb2;
+  color: @fg;
 }
 window#waybar.hidden {
   opacity: 0.2;
@@ -13,7 +19,7 @@ window#waybar.hidden {
 
 #workspaces button {
     padding: 0 5px;
-    color: #ebdbb2;
+    color: @fg;
     border: none;
     border-radius: 0;
 }
@@ -28,17 +34,22 @@ window#waybar.hidden {
   padding-right: 30px;
 }
 #mode, #clock, #battery {
-    padding: 0 10px;
+  padding: 0 10px;
 }
 
 #battery {
-    background: #665c54;
-}
-
-#battery.charging {
-    background: #83a598;
 }
 
 #battery.warning:not(.charging) {
   background: #d79921;
+}
+
+#pulseaudio-slider slider {
+}
+#pulseaudio-slider trough {
+  min-width: 100px;
+  background: black;
+}
+#pulseaudio-slider highlight {
+  background: #83a598;
 }

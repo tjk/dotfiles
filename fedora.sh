@@ -15,8 +15,6 @@ pkgs+=("btop" "eza" "fzf" "neovim" "zoxide")
 pkgs+=("sway" "waybar" "yambar" "rofi" "network-manager-applet" "mako")
 # for controlling via sway XF86 keys
 pkgs+=("brightnessctl" "pulseaudio-utils")
-# XXX: cannot get this working... maybe need perms? (TODO: maybe try gammastep ?)
-pkgs+=("redshift")
 
 # XXX maybe remove this if we like firefox enough
 sudo dnf config-manager --set-enabled google-chrome
@@ -29,6 +27,8 @@ pkgs+=("protobuf-compiler" "golang-google-protobuf")
 # https://bugzilla.redhat.com/show_bug.cgi?id=1783723#c6
 # for wasm_exec.js
 pkgs+=("golang-misc")
+# needed to install python 3.10.5 (via asdf)
+pkgs+=("openssl-devel" "zlib-devel")
 
 sudo rpm --import https://downloads.1password.com/linux/keys/1password.asc
 test -e /etc/yum.repos.d/1password.repo || \
@@ -40,9 +40,12 @@ pkgs+=("flameshot")
 
 # light/dark mode + gamma
 pkgs+=("darkman" "gammastep")
+# XXX: cannot get this working... maybe need perms? (TODO: maybe try gammastep ?)
+pkgs+=("redshift")
 
-# needed to install python 3.10.5 (via asdf)
-pkgs+=("openssl-devel" "zlib-devel")
+pkgs+=("powertop")
+
+pkgs+=("steam")
 
 # NOTE: slack, discord use browser for now
 sudo dnf -y install ${pkgs[*]}
