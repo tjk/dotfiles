@@ -13,7 +13,7 @@
 	renames = true
 
 [core]
-	editor = /usr/bin/vim
+	editor = /usr/bin/nvim
 	excludesfile = ~/.gitignore
 
 [push]
