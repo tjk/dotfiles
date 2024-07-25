@@ -13,6 +13,8 @@ test -e ~/.config/sway || \
 test -e ~/.config/waybar || \
   ln -sf $(pwd)/waybar ~/.config/waybar
 
+ln -sf $(pwd)/git/config ~/.gitconfig
+
 XDG_DATA_DIR=/usr/local/share
 test -e $XDG_DATA_DIR/dark-mode.d || \
   sudo ln -sf $(pwd)/darkman/dark-mode.d $XDG_DATA_DIR/dark-mode.d
