@@ -1,5 +1,6 @@
 #!/bin/sh
 # while darkman doesn't work, poor man's version
+# make sure chrome uses GTK bar
 
 # alacritty_theme="tokyo-night-storm"
 

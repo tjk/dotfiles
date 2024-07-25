@@ -74,14 +74,9 @@
     "format-plugged": "{capacity}% (plugged)",
   },
   "clock": {
-    "format": "{:%Y/%m/%d %H:%M}",
-    "tooltip-format": "<tt><small>{calendar}</small></tt>",
-    "calendar": {
-      "format": {
-        "months": "<span color='#ffead3'><b>{}</b></span>",
-        "today": "<span color='#ff6699'><b>{}</b></span>"
-      }
-    }
+    "timezones": ["America/Los_Angeles", "Europe/Paris", "Etc/UTC"],
+    "format": "{:%Y/%m/%d %H:%M (%Z)}",
+    "tooltip-format": "{tz_list}",
   },
   "pulseaudio/slider": {
     "min": 0,

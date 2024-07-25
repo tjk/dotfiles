@@ -75,10 +75,9 @@ mode "resize" {
 }
 
 exec sworkstyle &> /tmp/sworkstyle.log
-exec_always --no-startup-id 'blueman-applet'
-exec_always gammastep-indicator
-# TODO: fix XDG_CURRENT_DESKTOP not set
-# exec XDG_CURRENT_DESKTOP=sway flameshot
+exec --no-startup-id 'blueman-applet'
+# exec gammastep-indicator
+# exec env XDG_CURRENT_DESKTOP=sway flameshot
 # TODO uninstall these now that two finger click
 exec swhks
 exec swhkd
