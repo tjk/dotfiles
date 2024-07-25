@@ -42,6 +42,7 @@ pkgs+=("flameshot")
 pkgs+=("darkman" "gammastep")
 
 pkgs+=("powertop")
+pkgs+=("keychain")
 
 pkgs+=("steam")
 
