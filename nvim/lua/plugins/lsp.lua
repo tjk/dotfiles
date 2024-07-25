@@ -29,6 +29,10 @@ return {
 
     local lspconfig = require("lspconfig")
 
+    -- https://github.com/williamboman/mason-lspconfig.nvim/issues/371#issuecomment-2188015156
+    local mason_packages = vim.fn.stdpath("data") .. "/mason/packages"
+    local volar_path = mason_packages .. "/vue-language-server/node_modules/@vue/language-server"
+
     local servers = {
       gopls = {
         on_attach = function()
@@ -87,7 +91,29 @@ return {
           },
         },
       },
-      tsserver = {},
+      tsserver = {
+        init_options = {
+          plugins = {
+            {
+              name = "@vue/typescript-plugin",
+              location = volar_path,
+              languages = {"javascript", "typescript", "vue"},
+            }
+          },
+        },
+        filetypes = {
+          "javascript",
+          "typescript",
+          "vue",
+        },
+      },
+      volar = {
+        init_options = {
+          vue = {
+            hybridMode = false,
+          },
+        },
+      },
       zls = {},
     }
 
