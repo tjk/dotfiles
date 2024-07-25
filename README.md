@@ -1,5 +1,4 @@
 # TODO
-- ssh-agent or keychain
 - MISCONFIGURED: ctrl+click for right click
 - MISCONFIGURED: darkman for auto light to dark mode system wide
     - light-mode.d and dark-mode.d directories installed in wrong place i think (/usr/local/share)
