@@ -66,6 +66,17 @@ test -e ~/.asdf || \
 # mkdir -p ~/.config/fish/completions
 # ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions
 
+# asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
+pkgs += ("libffi-devel" "readline-devel" "libyaml-devel")
+# needs for some (work) gems:
+# pkgs += ("cmake")
+# pkgs += ("mysql-devel")
+# pkgs += ("libssh2-devel")
+# pkgs += ("zlib-devel")
+# pkgs += ("ncurses-compat-libs") # for libtinfo.so.5
+#
+# asdf plugin-add redis https://github.com/smashedtoatoms/asdf-redis.git
+
 # to swap background in neovim
 # https://github.com/mhinz/neovim-remote
 # asdf plugin-add python
