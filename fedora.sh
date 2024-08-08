@@ -27,6 +27,7 @@ pkgs+=("protobuf-compiler" "golang-google-protobuf")
 # https://bugzilla.redhat.com/show_bug.cgi?id=1783723#c6
 # for wasm_exec.js
 pkgs+=("golang-misc")
+# pkgs+=("tinygo") # doesn't match go1.22 :/
 # needed to install python 3.10.5 (via asdf)
 pkgs+=("openssl-devel" "zlib-devel")
 

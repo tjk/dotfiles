@@ -5,6 +5,7 @@ return {
     ensure_installed = {
       "bash",
       "c",
+      "glsl",
       "html",
       "lua",
       "luadoc",

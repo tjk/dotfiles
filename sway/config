@@ -95,6 +95,7 @@ input "type:keyboard" {
 # right click with two fingers instead of far right
 input "type:touchpad" {
   click_method clickfinger
+  dwt disabled # disable-while-typing
 }
 
 # gruvbox theme (TODO change these to tokyo?)
