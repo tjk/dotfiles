@@ -9,14 +9,16 @@ return {
     require("nvim-tree").setup({
       actions = {
         open_file = {
+          quit_on_open = true,
           window_picker = {
             enable = false
           },
         },
       },
-      update_focused_file = {
-        enable = true,
-      },
+      -- don't need this with quit_on_open
+      -- update_focused_file = {
+      --   enable = true,
+      -- },
     })
   end,
 }

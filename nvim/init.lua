@@ -62,6 +62,7 @@ map("n", "<C-j>", "<C-w><C-j>")
 map("n", "<C-k>", "<C-w><C-k>")
 -- vim.keymap.set('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
 map("n", "<leader>m", "<cmd>te make<CR>")
+map({"n","i"}, "<C-p>", "<cmd>NvimTreeFocus<CR>")
 
 require("config.lazy")
 
