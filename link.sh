@@ -10,6 +10,8 @@ test -e ~/.config/rofi || \
   ln -sf $(pwd)/rofi ~/.config/rofi
 test -e ~/.config/sway || \
   ln -sf $(pwd)/sway ~/.config/sway
+test -e ~/.config/tmux || \
+  ln -sf $(pwd)/tmux ~/.config/tmux
 test -e ~/.config/waybar || \
   ln -sf $(pwd)/waybar ~/.config/waybar
 
