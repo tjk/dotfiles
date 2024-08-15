@@ -12,4 +12,7 @@ require("lazy").setup({
   install = { colorscheme = { "solarized" } },
   -- automatically check for plugin updates
   -- checker = { enabled = true },
+  change_detection = {
+    notify = false,
+  },
 })
