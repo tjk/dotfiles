@@ -7,18 +7,21 @@
 # - touchpad -> scrolling -> traditional
 # - accessibility -> seeing -> enable large text
 # - set `menuAccessKeyFocuses` to false in firefox
+#
+# TODO:
+# - separate out stuff for fedora within WSL into a fedora-core.sh or something
 
 pkgs=()
 pkgs+=("alacritty")
-pkgs+=("fish")
-pkgs+=("bat" "btop" "eza" "fzf" "neovim" "zoxide")
+pkgs+=("fish") # TODO: chsh fish, set -gx EDITOR nvim
+pkgs+=("bat" "btop" "eza" "fzf" "neovim" "tmux" "zoxide")
 pkgs+=("sway" "waybar" "yambar" "rofi" "network-manager-applet" "mako" "blueman" "pavucontrol")
 # for controlling via sway XF86 keys
 pkgs+=("brightnessctl" "pulseaudio-utils")
 
-# XXX maybe remove this if we like firefox enough
-sudo dnf config-manager --set-enabled google-chrome
-pkgs+=("google-chrome-stable")
+# !WSL
+# sudo dnf config-manager --set-enabled google-chrome
+# pkgs+=("google-chrome-stable")
 
 # coding / tools
 # XXX: check whether golang-x-tools-gopls is included in go
@@ -31,10 +34,11 @@ pkgs+=("golang-misc")
 # needed to install python 3.10.5 (via asdf)
 pkgs+=("openssl-devel" "zlib-devel")
 
-sudo rpm --import https://downloads.1password.com/linux/keys/1password.asc
-test -e /etc/yum.repos.d/1password.repo || \
-  sudo sh -c 'echo -e "[1password]\nname=1Password Stable Channel\nbaseurl=https://downloads.1password.com/linux/rpm/stable/\$basearch\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=\"https://downloads.1password.com/linux/keys/1password.asc\"" > /etc/yum.repos.d/1password.repo'
-pkgs+=("1password")
+# !WSL
+# sudo rpm --import https://downloads.1password.com/linux/keys/1password.asc
+# test -e /etc/yum.repos.d/1password.repo || \
+#   sudo sh -c 'echo -e "[1password]\nname=1Password Stable Channel\nbaseurl=https://downloads.1password.com/linux/rpm/stable/\$basearch\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=\"https://downloads.1password.com/linux/keys/1password.asc\"" > /etc/yum.repos.d/1password.repo'
+# pkgs+=("1password")
 
 mkdir -p ~/Pictures/Screenshots
 pkgs+=("flameshot")
@@ -45,7 +49,8 @@ pkgs+=("darkman" "gammastep")
 pkgs+=("powertop")
 pkgs+=("keychain")
 
-pkgs+=("steam")
+# !WSL
+# kgs+=("steam")
 
 # NOTE: slack, discord use browser for now
 sudo dnf -y install ${pkgs[*]}
@@ -61,27 +66,25 @@ mkdir -p ~/.local/share/fonts
 test -e ~/.local/share/fonts/FiraCodeNerdFont-Regular.ttf || \
   (cd ~/.local/share/fonts && curl -fLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf)
 
-# asdf
+# asdf (fish completions via link.sh)
 test -e ~/.asdf || \
   git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
-# mkdir -p ~/.config/fish/completions
-# ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions
 
 # asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
-pkgs += ("libffi-devel" "readline-devel" "libyaml-devel")
+pkgs+=("libffi-devel" "readline-devel" "libyaml-devel")
 # needs for some (work) gems:
-# pkgs += ("cmake")
-# pkgs += ("mysql-devel")
-# pkgs += ("libssh2-devel")
-# pkgs += ("zlib-devel")
-# pkgs += ("ncurses-compat-libs") # for libtinfo.so.5
+# pkgs+=("cmake")
+# pkgs+=("mysql-devel")
+# pkgs+=("libssh2-devel")
+# pkgs+=("zlib-devel")
+# pkgs+=("ncurses-compat-libs") # for libtinfo.so.5
 #
 # asdf plugin-add redis https://github.com/smashedtoatoms/asdf-redis.git
 
 # to swap background in neovim
 # https://github.com/mhinz/neovim-remote
 # asdf plugin-add python
-# asdf python install 3.10.5
+# asdf install python 3.10.5
 # echo 'python 3.10.5' >> ~/.tool-versions
 pip install neovim-remote
 
