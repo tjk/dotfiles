@@ -6,6 +6,7 @@ return {
       "bash",
       "c",
       "glsl",
+      "graphql",
       "html",
       "lua",
       "luadoc",
