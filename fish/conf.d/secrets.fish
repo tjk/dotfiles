@@ -1,1 +1,1 @@
-set --export ANTHROPIC_API_KEY test
+set --export ANTHROPIC_API_KEY test2
