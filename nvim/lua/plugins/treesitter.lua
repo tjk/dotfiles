@@ -13,6 +13,7 @@ return {
       "markdown",
       "nix",
       "pug",
+      "rust",
       "typescript",
       "vim",
       "vimdoc",

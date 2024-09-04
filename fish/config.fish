@@ -3,8 +3,8 @@ if status is-interactive
   fish_vi_key_bindings
   zoxide init --cmd cd fish | source
   source ~/.asdf/asdf.fish
-  # add this for pip
-  fish_add_path ~/.asdf/installs/python/3.10.5/bin
+  fish_add_path ~/.asdf/installs/python/3.10.5/bin # add this for pip
+  fish_add_path $(go env GOPATH)/bin
   eval (keychain --eval --agents ssh -Q --quiet id_ed25519 --nogui)
 end
 

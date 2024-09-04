@@ -1,7 +1,7 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
-SETUVAR --export SSH_AGENT_PID:269
-SETUVAR --export SSH_AUTH_SOCK:/tmp/ssh\x2dXXXXXXXbJRuN/agent\x2e258
+SETUVAR --export SSH_AGENT_PID:3326
+SETUVAR --export SSH_AUTH_SOCK:/tmp/ssh\x2dXXXXXXgezxaM/agent\x2e3325
 SETUVAR SSH_KEYS_TO_AUTOLOAD:/home/tjk/\x2essh/id_ed25519
 SETUVAR __fish_initialized:3400
 SETUVAR _fisher_jorgebucaran_2F_fisher_files:\x7e/\x2econfig/fish/functions/fisher\x2efish\x1e\x7e/\x2econfig/fish/completions/fisher\x2efish
@@ -36,4 +36,4 @@ SETUVAR fish_pager_color_description:yellow\x1e\x2di
 SETUVAR fish_pager_color_prefix:normal\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
 SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
 SETUVAR fish_pager_color_selected_background:\x2dr
-SETUVAR fish_user_paths:/home/tjk/\x2easdf/installs/python/3\x2e10\x2e5/bin
+SETUVAR fish_user_paths:/home/tjk/go/bin\x1e/home/tjk/go\x1e/home/tjk/\x2easdf/installs/python/3\x2e10\x2e5/bin

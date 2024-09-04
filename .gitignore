@@ -1,1 +1,4 @@
 /tmux/plugins
+.gitsecret/keys/random_seed
+!*.secret
+/fish/conf.d/secrets.fish
