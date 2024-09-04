@@ -38,10 +38,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
-vim.diagnostic.config({
-  virtual_text = false,
-})
-
+-- XXX only do this if virtual text doesn't fit fully
 vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
   group = vim.api.nvim_create_augroup("float_diagnostic_cursor", { clear = true }),
   callback = function ()

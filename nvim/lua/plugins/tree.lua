@@ -16,9 +16,9 @@ return {
         },
       },
       -- don't need this with quit_on_open
-      -- update_focused_file = {
-      --   enable = true,
-      -- },
+      update_focused_file = {
+        enable = true,
+      },
     })
   end,
 }

@@ -7,3 +7,13 @@ if status is-interactive
   fish_add_path ~/.asdf/installs/python/3.10.5/bin
   eval (keychain --eval --agents ssh -Q --quiet id_ed25519 --nogui)
 end
+
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH
+
+set --export PATH $(go env GOPATH)/bin $PATH
+
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH
