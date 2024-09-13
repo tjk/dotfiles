@@ -91,7 +91,7 @@ return {
           },
         },
       },
-      tsserver = {
+      ts_ls = {
         init_options = {
           plugins = {
             {
@@ -130,6 +130,11 @@ return {
     require("mason-lspconfig").setup({
       handlers = {
         function(server_name)
+          -- https://github.com/neovim/nvim-lspconfig/pull/3232
+          if server_name == "tsserver" then
+            server_name = "ts_ls"
+          end
+
           local server = servers[server_name] or {}
           server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
           lspconfig[server_name].setup(server)
