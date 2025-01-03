@@ -29,11 +29,11 @@ return {
 
     local lspconfig = require("lspconfig")
 
-    -- https://github.com/williamboman/mason-lspconfig.nvim/issues/371#issuecomment-2188015156
-    local mason_packages = vim.fn.stdpath("data") .. "/mason/packages"
-    local volar_path = mason_packages .. "/vue-language-server/node_modules/@vue/language-server"
+    local mason_registry = require("mason-registry")
+    local vue_language_server_path = mason_registry.get_package("vue-language-server"):get_install_path() .. "/node_modules/@vue/language-server"
 
     local servers = {
+      clangd = {},
       gopls = {
         on_attach = function()
           vim.api.nvim_create_autocmd("BufWritePre", {
@@ -91,19 +91,25 @@ return {
           },
         },
       },
+      ruby_lsp = {},
+      rust_analyzer = {},
       ts_ls = {
         init_options = {
           plugins = {
             {
               name = "@vue/typescript-plugin",
-              location = volar_path,
+              location = vue_language_server_path,
               languages = {"javascript", "typescript", "vue"},
             }
           },
         },
         filetypes = {
           "javascript",
+          "javascriptreact",
+          "javascript.jsx",
           "typescript",
+          "typescriptreact",
+          "typescript.tsx",
           "vue",
         },
       },
@@ -114,6 +120,7 @@ return {
           },
         },
       },
+      yamlls = {},
       zls = {},
     }
 

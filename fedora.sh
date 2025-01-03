@@ -34,6 +34,9 @@ pkgs+=("golang-misc")
 # needed to install python 3.10.5 (via asdf)
 pkgs+=("openssl-devel" "zlib-devel")
 
+pkgs+=("brotli-devel" "mysql-devel" "ruby-devel" "libssh2-devel" "libsodium-devel" "yajl-devel") # work
+pkgs+=("libaio-devel" "numactl-libs" "ncurses-compat-libs") # work, for mysql
+
 # !WSL
 # sudo rpm --import https://downloads.1password.com/linux/keys/1password.asc
 # test -e /etc/yum.repos.d/1password.repo || \
