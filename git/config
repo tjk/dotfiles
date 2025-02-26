@@ -11,6 +11,8 @@
 
 [diff]
 	renames = true
+	colorMoved = plain
+	mnemonicPrefix = true
 
 [core]
 	editor = /usr/bin/nvim
@@ -18,6 +20,8 @@
 
 [push]
 	default = current
+	autoSetupRemote = true
+	followTags = true
 
 [pull]
 	rebase = true
@@ -32,3 +36,6 @@
 [rebase]
 	autosquash = true
 	autostash = true
+
+[commit]
+	verbose = true
