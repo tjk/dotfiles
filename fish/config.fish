@@ -17,5 +17,6 @@ set --export PATH $BUN_INSTALL/bin $PATH
 set --export GOPATH "$HOME"
 set --export PATH $(go env GOPATH)/bin $PATH
 
-# emcc
 set --export PATH /home/tjk/src/github.com/emscripten-core/emsdk/upstream/emscripten $PATH
+set --export PATH "$HOME/zig/zig-linux-x86_64-0.14.0/" $PATH
+set --export EMSDK_QUIET 1

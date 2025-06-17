@@ -1,152 +1,119 @@
 return {
-  "neovim/nvim-lspconfig",
-  dependencies = {
-    { "williamboman/mason.nvim", config = true },
-    "williamboman/mason-lspconfig.nvim",
-    "WhoIsSethDaniel/mason-tool-installer.nvim",
-    { "j-hui/fidget.nvim", opts = {} }, -- status updates
-    { "folke/neodev.nvim", opts = {} }, -- lua lsp for nvim configs
+  {
+    "mason-org/mason.nvim",
+    build = ":MasonUpdate",
+    opts = {},
   },
-  config = function()
-    vim.api.nvim_create_autocmd("LSPAttach", {
-      group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
-      callback = function(event)
-        local map = function(keys, func)
-          vim.keymap.set("n", keys, func, { buffer = event.buf })
-        end
+  {
+    "neovim/nvim-lspconfig",
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      -- { "williamboman/mason.nvim", config = true },
+      "williamboman/mason-lspconfig.nvim",
+      "yioneko/nvim-vtsls",
+      "nvim-lua/plenary.nvim",
+      -- "WhoIsSethDaniel/mason-tool-installer.nvim",
+      -- { "j-hui/fidget.nvim", opts = {} }, -- status updates
+      -- { "folke/neodev.nvim", opts = {} }, -- lua lsp for nvim configs
+      -- { "ziglang/zig.vim" },
+    },
+    opts = {},
+    config = function()
+      require("mason-lspconfig").setup({
+        ensure_installed = {
+          "vtsls",
+          "vue_ls",
+          -- "eslint",
+          -- "tailwindcss",
+          -- "emmet_language_server",
+          "lua_ls",
+          -- "hyprls",
+        },
+        automatic_enable = true,
+        automatic_installation = false,
+      })
 
-        local builtin = require("telescope.builtin")
-        map("gd", builtin.lsp_definitions)
-        map("gr", builtin.lsp_references)
-        map("gt", builtin.lsp_type_definitions)
-        -- map("gi", builtin.lsp_implementations)
-        map("<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
-      end
-    })
+      vim.lsp.config("vtsls", {
+        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+        settings = {
+          vtsls = { tsserver = { globalPlugins = {} } },
+          typescript = {
+            inlayHints = {
+              parameterNames = { enabled = "literals" },
+              parameterTypes = { enabled = true },
+              variableTypes = { enabled = true },
+              propertyDeclarationTypes = { enabled = true },
+              functionLikeReturnTypes = { enabled = true },
+              enumMemberValues = { enabled = true },
+            },
+          },
+        },
+        before_init = function(_, config)
+          table.insert(config.settings.vtsls.tsserver.globalPlugins, {
+            name = "@vue/typescript-plugin",
+            location = vim.fn.expand(
+              "$MASON/packages/vue-language-server/node_modules/@vue/language-server"
+            ),
+            languages = { "vue" },
 
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
-
-    local lspconfig = require("lspconfig")
-
-    local mason_registry = require("mason-registry")
-    local vue_language_server_path = mason_registry.get_package("vue-language-server"):get_install_path() .. "/node_modules/@vue/language-server"
-
-    local servers = {
-      clangd = {},
-      gopls = {
-        on_attach = function()
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            pattern = "*.go",
-            callback = function()
-              local params = vim.lsp.util.make_range_params()
-              params.context = {only = {"source.organizeImports"}}
-              -- buf_request_sync defaults to a 1000ms timeout. Depending on your
-              -- machine and codebase, you may want longer. Add an additional
-              -- argument after params if you find that you have to write the file
-              -- twice for changes to be saved.
-              -- E.g., vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
-              local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
-              for cid, res in pairs(result or {}) do
-                for _, r in pairs(res.result or {}) do
-                  if r.edit then
-                    local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
-                    vim.lsp.util.apply_workspace_edit(r.edit, enc)
-                  end
-                end
-              end
-              vim.lsp.buf.format({async = false})
-            end
+            configNamespace = "typescript",
+            enableForWorkspaceTypeScriptVersions = true,
           })
         end,
-        settings = {
-          gopls = {
-            buildFlags = {"-tags=dev"},
-            analyses = {
-              unusedparams = true,
-            },
-            staticcheck = true,
-            gofumpt = true,
-          },
-        },
-      },
-      -- nil_ls = {},
-      lua_ls = {
-        -- https://lsp-zero.netlify.app/v3.x/blog/you-might-not-need-lsp-zero.html
+        on_attach = function(client)
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+
+        end,
+      })
+
+      vim.lsp.config("lua_ls", {
+        on_attach = function(client)
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+        end,
         settings = {
           Lua = {
-            runtime = {
-              version = "LuaJIT",
+            workspace = {
+              checkThirdParty = false,
+            },
+            completion = {
+              callSnippet = "Replace",
+            },
+            telemetry = {
+              enable = false,
             },
             diagnostics = {
-              globals = {
-                "vim",
-              },
-            },
-            workspace = {
-              library = {
-                vim.env.VIMRUNTIME,
-              },
+              globals = { "vim" },
             },
           },
         },
-      },
-      ruby_lsp = {},
-      rust_analyzer = {},
-      ts_ls = {
-        init_options = {
-          plugins = {
-            {
-              name = "@vue/typescript-plugin",
-              location = vue_language_server_path,
-              languages = {"javascript", "typescript", "vue"},
-            }
-          },
-        },
-        filetypes = {
-          "javascript",
-          "javascriptreact",
-          "javascript.jsx",
-          "typescript",
-          "typescriptreact",
-          "typescript.tsx",
-          "vue",
-        },
-      },
-      volar = {
-        init_options = {
-          vue = {
-            hybridMode = false,
-          },
-        },
-      },
-      yamlls = {},
-      zls = {},
-    }
+      })
 
-    require("mason").setup()
+      vim.lsp.config("gopls", {
+      })
 
-    local ensure_installed = vim.tbl_keys(servers or {})
-    vim.list_extend(ensure_installed, {
-      "stylua", -- Used to format Lua code
-    })
-    require("mason-tool-installer").setup({
-      ensure_installed = ensure_installed,
-    })
+      -- TODO: gopls, clangd, ruby_lsp, rust_analyzer, yamlls, zls
 
-    require("mason-lspconfig").setup({
-      handlers = {
-        function(server_name)
-          -- https://github.com/neovim/nvim-lspconfig/pull/3232
-          if server_name == "tsserver" then
-            server_name = "ts_ls"
+      vim.api.nvim_create_autocmd("LSPAttach", {
+        group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
+        callback = function(event)
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
+          -- Enable completion triggered by <c-x><c-o>
+          -- vim.bo[event.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
+
+          local map = function(keys, func)
+            vim.keymap.set("n", keys, func, { buffer = event.buf })
           end
 
-          local server = servers[server_name] or {}
-          server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-          lspconfig[server_name].setup(server)
-        end,
-      },
-    })
-  end,
+          local builtin = require("telescope.builtin")
+          map("gd", builtin.lsp_definitions)
+          map("gr", builtin.lsp_references)
+          map("gt", builtin.lsp_type_definitions)
+          -- map("gi", builtin.lsp_implementations)
+          map("<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
+        end
+      })
+    end,
+  },
 }

@@ -63,6 +63,11 @@ map({"n","i"}, "<C-p>", "<cmd>NvimTreeFocus<CR>")
 
 require("config.lazy")
 
+-- putting gd after doesn't work...
+map("n", "gD", "<cmd>vsplit<CR><cmd>Telescope lsp_definitions<CR>", silent)
+-- map("n", "gdh", ":split<CR>gd", silent)
+-- map("n", "gdd", "gd", silent)
+
 -- NOTES
 -- :h <ctrl-r> <ctrl-w> -- help for word under curor 
 -- auto-pairs "fly mode" <meta(alt)+b> to AutoPairsBackInsert
