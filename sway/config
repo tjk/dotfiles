@@ -75,6 +75,8 @@ mode "resize" {
     bindsym $mod+r mode "default"
 }
 
+bindsym Print exec XDG_CURRENT_DESKTOP=sway flameshot gui --path /home/tjk/Pictures/Screenshots
+
 exec sworkstyle &> /tmp/sworkstyle.log
 exec --no-startup-id 'blueman-applet'
 # exec gammastep-indicator
