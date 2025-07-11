@@ -7,7 +7,7 @@ if status is-interactive
   fish_add_path $(go env GOPATH)/bin
   fish_add_path ~/bin
   eval (keychain --eval --agents ssh -Q --quiet id_ed25519 --nogui)
-  source ~/.config/fish/conf.d/secrets.fish
+  # source ~/.config/fish/conf.d/secrets.fish
 end
 
 # bun
