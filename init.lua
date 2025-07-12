@@ -1,3 +1,6 @@
+local opt = vim.opt
+local map = vim.keymap.set
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -12,7 +15,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     os.exit(1)
   end
 end
-vim.opt.rtp:prepend(lazypath)
+opt.rtp:prepend(lazypath)
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
@@ -20,27 +23,30 @@ vim.g.maplocalleader = "\\"
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
-vim.opt.clipboard = "unnamedplus"
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.expandtab = true
-vim.opt.hlsearch = false
-vim.opt.incsearch = true
-vim.opt.smartcase = true
-vim.opt.ignorecase = true
-vim.opt.mouse = "nvi"
-vim.opt.cursorline = true
-vim.opt.swapfile = false
-vim.opt.signcolumn = "yes" -- Reserve a space in the gutter
-vim.opt.background = "dark"
-vim.opt.termguicolors = true
-vim.opt.splitbelow = true
-vim.opt.splitright = true
-vim.opt.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
-vim.opt.scrolloff = 10
+opt.clipboard = "unnamedplus"
+opt.number = true
+opt.relativenumber = true
+opt.tabstop = 2
+opt.shiftwidth = 2
+opt.expandtab = true
+opt.hlsearch = false
+opt.incsearch = true
+opt.smartcase = true
+opt.autoindent = true
+opt.ignorecase = true
+opt.mouse = "nvi"
+opt.cursorline = true
+opt.wrap = false
+opt.swapfile = false
+opt.signcolumn = "yes" -- Reserve a space in the gutter
+opt.background = "dark"
+opt.termguicolors = true
+opt.splitbelow = true
+opt.splitright = true
+opt.list = true
+opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+opt.scrolloff = 10
+opt.hlsearch = true
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   callback = function()
@@ -48,7 +54,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
-local map = vim.keymap.set
 map("n", "<Esc>", "<cmd>nohlsearch<CR>")
 map("n", "j", "gj")
 map("n", "k", "gk")
@@ -60,6 +65,7 @@ map("n", "<C-h>", "<C-w>h", { noremap = true })
 map("n", "<C-j>", "<C-w>j", { noremap = true })
 map("n", "<C-k>", "<C-w>k", { noremap = true })
 map("n", "<C-l>", "<C-w>l", { noremap = true })
+map("n", "<leader>nh", ":nohl<CR>")
 
 vim.diagnostic.config({ virtual_text = true })
 map("n", "<leader>dK", vim.diagnostic.open_float)
@@ -102,7 +108,7 @@ require("lazy").setup({
         require("nvim-tree").setup(opts)
         local api = require("nvim-tree.api")
         map("n", "<C-s>", api.node.open.horizontal) -- make this like fzf
-        map("n", "<leader>e", "<cmd>NvimTreeToggle<cr>")
+        map("n", "<leader>e", "<cmd>NvimTreeToggle<CR>")
         -- XXX unbind <C-x> ? + check vertical split
       end,
     },
@@ -222,11 +228,11 @@ require("lazy").setup({
       -- dependencies = { "echasnovski/mini.icons" },
       opts = {},
       config = function()
-        map("n", "<leader>f", "<cmd>FzfLua files<cr>")
-        map("n", "<leader>/", "<cmd>FzfLua live_grep<cr>")
-        map("n", "<leader>gs", "<cmd>FzfLua git_status<cr>")
-        map("n", "<leader>q", "<cmd>FzfLua diagnostics_document<cr>")
-        map("n", "<leader>Q", "<cmd>FzfLua diagnostics_workspace<cr>")
+        map("n", "<leader>f", "<cmd>FzfLua files<CR>")
+        map("n", "<leader>/", "<cmd>FzfLua live_grep<CR>")
+        map("n", "<leader>gs", "<cmd>FzfLua git_status<CR>")
+        map("n", "<leader>q", "<cmd>FzfLua diagnostics_document<CR>")
+        map("n", "<leader>Q", "<cmd>FzfLua diagnostics_workspace<CR>")
       end,
     },
     {
