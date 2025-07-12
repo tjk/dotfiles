@@ -36,6 +36,8 @@ vim.opt.swapfile = false
 vim.opt.signcolumn = "yes" -- Reserve a space in the gutter
 vim.opt.background = "dark"
 vim.opt.termguicolors = true
+vim.opt.splitbelow = true
+vim.opt.splitright = true
 vim.opt.list = true
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 vim.opt.scrolloff = 10
@@ -58,7 +60,9 @@ map("n", "<C-h>", "<C-w>h", { noremap = true })
 map("n", "<C-j>", "<C-w>j", { noremap = true })
 map("n", "<C-k>", "<C-w>k", { noremap = true })
 map("n", "<C-l>", "<C-w>l", { noremap = true })
-map("n", "<leader>e", "<cmd>NvimTreeFocus<cr>")
+
+vim.diagnostic.config({ virtual_text = true })
+map("n", "<leader>dK", vim.diagnostic.open_float)
 
 require("lazy").setup({
   spec = {
@@ -81,9 +85,25 @@ require("lazy").setup({
       dependencies = {
         "nvim-tree/nvim-web-devicons",
       },
-      config = function()
-        require("nvim-tree").setup {}
-        -- require("nvim-tree.api").tree.focus()
+      opts = {
+        actions = {
+          open_file = {
+            -- quit_on_open = true,
+            window_picker = {
+              enable = false
+            },
+          },
+        },
+        update_focused_file = {
+          enable = true,
+        },
+      },
+      config = function(_, opts)
+        require("nvim-tree").setup(opts)
+        local api = require("nvim-tree.api")
+        map("n", "<C-s>", api.node.open.horizontal) -- make this like fzf
+        map("n", "<leader>e", "<cmd>NvimTreeToggle<cr>")
+        -- XXX unbind <C-x> ? + check vertical split
       end,
     },
     {
@@ -124,7 +144,12 @@ require("lazy").setup({
       main = "ibl",
       ---@module "ibl"
       ---@type ibl.config
-      opts = {},
+      opts = {
+        scope = {
+          show_start = false,
+          show_end = false,
+        },
+      },
     },
     {
       "saghen/blink.cmp",
@@ -137,6 +162,7 @@ require("lazy").setup({
       "neovim/nvim-lspconfig",
       dependencies = {
         "saghen/blink.cmp",
+        "ibhagwan/fzf-lua",
       },
       opts = {
         servers = {
@@ -157,10 +183,22 @@ require("lazy").setup({
       },
       config = function(_, opts)
         local lspconfig = require("lspconfig")
+        local fzf_lua = require("fzf-lua")
         for server, config in pairs(opts.servers) do
           config.capabilities = require('blink.cmp').get_lsp_capabilities(config.capabilities)
           lspconfig[server].setup(config)
         end
+        vim.api.nvim_create_autocmd('LspAttach', {
+          callback = function(ev)
+            -- local client = vim.lsp.get_client_by_id(ev.data.client_id)
+            local bufopts = { noremap = true, silent = true, buffer = ev.buf }
+            map("n", "gD", vim.lsp.buf.declaration, bufopts)
+            map("n", "gd", fzf_lua.lsp_definitions, bufopts) -- vim.lsp.buf.definition
+            map("n", "gr", fzf_lua.lsp_references, bufopts) -- vim.lsp.buf.references
+            map("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
+            map("n", "<leader>ca", fzf_lua.lsp_code_actions, bufopts) -- vim.lsp.buf.code_action
+          end
+        })
       end,
     },
     {
@@ -201,6 +239,33 @@ require("lazy").setup({
       dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
       opts = {},
     },
+    -- TODO uninstall? or use once integrated with diagnostics
+    -- https://github.com/wfxr/minimap.vim?tab=readme-ov-file#integrated-with-diagnostics-or-git-status-plugins
+    -- {
+    --   "wfxr/minimap.vim",
+    --   build = "cargo install --locked code-minimap",
+    --   lazy = false,
+    --   cmd = { "Minimap", "MinimapClose", "MinimapToggle", "MinimapRefresh", "MinimapUpdateHighlight" },
+    --   init = function()
+    --     vim.g.minimap_width = 10
+    --     vim.g.minimap_auto_start = true
+    --     vim.g.minimap_auto_start_win_enter = true
+    --   end,
+    -- },
+    -- TODO maybe remove this too... i just want vscode style diagnostics throughout file border
+    -- {
+    --   "gorbit99/codewindow.nvim",
+    --   opts = {
+    --     auto_enable = true,
+    --     window_border = "shadow",
+    --     show_cursor = false,
+    --   },
+    --   config = function(_, opts)
+    --     local codewindow = require("codewindow")
+    --     codewindow.setup(opts)
+    --     codewindow.apply_default_keybinds()
+    --   end,
+    -- },
   },
   install = { colorscheme = { "tokyonight" } },
   -- disable automatically checking for plugin updates
