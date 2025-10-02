@@ -70,6 +70,9 @@ map("n", "<leader>nh", ":nohl<CR>")
 vim.diagnostic.config({ virtual_text = true })
 map("n", "<leader>dK", vim.diagnostic.open_float)
 
+-- https://github.com/vuejs/language-tools/wiki/Neovim#configuration
+local vue_language_server_path = vim.fn.stdpath('data') .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
+
 require("lazy").setup({
   spec = {
     {
@@ -119,8 +122,11 @@ require("lazy").setup({
       build = ":TSUpdate",
       opts = {
         ensure_installed = {
+          "css",
+          "html",
           "lua",
           "typescript",
+          "vue",
         },
         highlight = {
           enable = true,
@@ -128,13 +134,12 @@ require("lazy").setup({
             "ruby",
           },
         },
-        -- XXX check if this should be included
-        -- indent = {
-        --   enable = true,
-        --   disable = {
-        --     "ruby",
-        --   },
-        -- },
+        indent = {
+          enable = true,
+          disable = {
+            "ruby",
+          },
+        },
       },
       config = function(_, opts)
          require("nvim-treesitter.configs").setup(opts)
@@ -170,8 +175,15 @@ require("lazy").setup({
         "saghen/blink.cmp",
         "ibhagwan/fzf-lua",
       },
+      automatic_installation = true,
       opts = {
+        ensure_installed = {
+          "gopls",
+          "vtsls",
+          "vue_ls",
+        },
         servers = {
+          gopls = {},
           lua_ls = {
             settings = {
               Lua = {
@@ -184,6 +196,63 @@ require("lazy").setup({
                 },
               },
             },
+          },
+          ruby_lsp = {
+            init_options = {
+              formatter = 'standard',
+              linters = { 'standard' },
+            },
+          },
+          vtsls = {
+            filetypes = {
+              "javascript",
+              "typescript",
+              "vue",
+            },
+            settings = {
+              vtsls = {
+                tsserver = {
+                  globalPlugins = {
+                    {
+                      name = '@vue/typescript-plugin',
+                      location = vue_language_server_path,
+                      languages = { 'vue' },
+                      configNamespace = 'typescript',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          vue_ls = {
+            on_init = function(client)
+              client.handlers['tsserver/request'] = function(_, result, context)
+                local clients = vim.lsp.get_clients({ bufnr = context.bufnr, name = 'vtsls' })
+                if #clients == 0 then
+
+                  vim.notify('Could not find `vtsls` lsp client, `vue_ls` would not work without it.', vim.log.levels.ERROR)
+                  return
+                end
+                local ts_client = clients[1]
+
+                local param = unpack(result)
+                local id, command, payload = unpack(param)
+                ts_client:exec_cmd({
+                  title = 'vue_request_forward', -- You can give title anything as it's used to represent a command in the UI, `:h Client:exec_cmd`
+                  command = 'typescript.tsserverRequest',
+                  arguments = {
+                    command,
+
+                    payload,
+                  },
+                }, { bufnr = context.bufnr }, function(_, r)
+                  local response_data = { { id, r.body } }
+
+                  ---@diagnostic disable-next-line: param-type-mismatch
+                  client:notify('tsserver/response', response_data)
+                end)
+              end
+            end,
           },
         },
       },
@@ -228,6 +297,8 @@ require("lazy").setup({
       -- dependencies = { "echasnovski/mini.icons" },
       opts = {},
       config = function()
+        local fzf_lua = require("fzf-lua")
+        fzf_lua.register_ui_select()
         map("n", "<leader>f", "<cmd>FzfLua files<CR>")
         map("n", "<leader>/", "<cmd>FzfLua live_grep<CR>")
         map("n", "<leader>gs", "<cmd>FzfLua git_status<CR>")
@@ -240,11 +311,11 @@ require("lazy").setup({
       "j-hui/fidget.nvim",
       opts = {},
     },
-    {
-      "pmizio/typescript-tools.nvim",
-      dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-      opts = {},
-    },
+    -- {
+    --   "pmizio/typescript-tools.nvim",
+    --   dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    --   opts = {},
+    -- },
     -- TODO uninstall? or use once integrated with diagnostics
     -- https://github.com/wfxr/minimap.vim?tab=readme-ov-file#integrated-with-diagnostics-or-git-status-plugins
     -- {
