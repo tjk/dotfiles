@@ -47,6 +47,7 @@ opt.list = true
 opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 opt.scrolloff = 10
 opt.hlsearch = true
+-- opt.winborder = "rounded"
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   callback = function()
@@ -125,6 +126,7 @@ require("lazy").setup({
           "css",
           "html",
           "lua",
+          "pug",
           "typescript",
           "vue",
         },
@@ -341,6 +343,16 @@ require("lazy").setup({
     --     local codewindow = require("codewindow")
     --     codewindow.setup(opts)
     --     codewindow.apply_default_keybinds()
+    --   end,
+    -- },
+    -- {
+    --   "aserowy/tmux.nvim",
+    --   config = function()
+    --     require("tmux").setup({
+    --       copy_sync = {
+    --         enable = false,
+    --       },
+    --     })
     --   end,
     -- },
   },
