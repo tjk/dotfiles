@@ -218,6 +218,8 @@ vim.pack.add({
 		version = vim.version.range("1.*"),
 	},
 	"https://github.com/mrcjkb/rustaceanvim",
+	"https://github.com/b0o/SchemaStore.nvim",
+	"https://github.com/windwp/nvim-autopairs",
 })
 
 -- ## CONFIGURE PLUGINS
@@ -237,6 +239,8 @@ require("mini.clue").setup({
 		require("mini.clue").gen_clues.builtin_completion(),
 	},
 })
+
+require("nvim-autopairs").setup({})
 
 local setup_treesitter = function()
 	local treesitter = require("nvim-treesitter")
@@ -462,12 +466,10 @@ do
 		capabilities = capabilities,
 	}
 	local ensure_installed = {}
-	local lsp_enable = function(name, config_opts, tool_names)
-		for _, tool_name in ipairs(tool_names or {}) do
-			table.insert(ensure_installed, tool_name)
-		end
+	local lsp_enable = function(name, config_opts)
 		vim.lsp.config(name, config_opts or {})
 		vim.lsp.enable(name)
+		table.insert(ensure_installed, name)
 	end
 	lsp_enable("bashls")
 	lsp_enable("clangd")
@@ -542,6 +544,14 @@ do
 		})
 	end
 	lsp_enable("gopls")
+	lsp_enable("jsonls", {
+		settings = {
+			json = {
+				schemas = require("schemastore").json.schemas(),
+				validate = { enable = true },
+			},
+		},
+	})
 	lsp_enable("lua_ls", {
 		settings = {
 			Lua = {
@@ -562,6 +572,17 @@ do
 			capabilities = capabilities,
 		},
 	}
+	lsp_enable("yamlls", {
+		settings = {
+			yaml = {
+				schemaStore = {
+					enable = false,
+					url = "",
+				},
+				schemas = require("schemastore").json.schemas(),
+			},
+		},
+	})
 
 	require("mason-tool-installer").setup({
 		ensure_installed = ensure_installed,
@@ -570,3 +591,10 @@ do
 		},
 	})
 end
+
+vim.filetype.add({
+	extension = {
+		gotmpl = "gotmpl",
+	},
+})
+vim.g.load_doxygen_syntax = 1
