@@ -1,21 +1,9 @@
+-- Dependencies:
+-- * tree-sitter-cli
+-- * luarocks
+
 local opt = vim.opt
 local map = vim.keymap.set
-
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
-  if vim.v.shell_error ~= 0 then
-    vim.api.nvim_echo({
-      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-      { out, "WarningMsg" },
-      { "\nPress any key to exit..." },
-    }, true, {})
-    vim.fn.getchar()
-    os.exit(1)
-  end
-end
-opt.rtp:prepend(lazypath)
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
@@ -23,7 +11,13 @@ vim.g.maplocalleader = "\\"
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
-opt.clipboard = "unnamedplus"
+opt.termguicolors = true
+
+vim.pack.add({ "https://github.com/folke/tokyonight.nvim" })
+opt.background = "dark"
+vim.cmd.colorscheme("tokyonight")
+
+opt.clipboard:append("unnamedplus")
 opt.number = true
 opt.relativenumber = true
 opt.tabstop = 2
@@ -32,6 +26,7 @@ opt.expandtab = true
 opt.hlsearch = false
 opt.incsearch = true
 opt.smartcase = true
+opt.smartindent = true
 opt.autoindent = true
 opt.ignorecase = true
 opt.mouse = "nvi"
@@ -39,22 +34,34 @@ opt.cursorline = true
 opt.wrap = false
 opt.swapfile = false
 opt.signcolumn = "yes" -- Reserve a space in the gutter
-opt.background = "dark"
-opt.termguicolors = true
+opt.colorcolumn = "+1"
 opt.splitbelow = true
 opt.splitright = true
 opt.list = true
 opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 opt.scrolloff = 10
+opt.sidescrolloff = 10
 opt.hlsearch = true
+opt.incsearch = true
+opt.showmatch = true
+opt.hidden = true
+opt.errorbells = false
 -- opt.winborder = "rounded"
 
-vim.api.nvim_create_autocmd("TextYankPost", {
-  callback = function()
-    vim.highlight.on_yank()
-  end,
-})
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldlevel = 99
 
+opt.undofile = true
+local undodir = vim.fn.expand("~/.nvim/undodir")
+if vim.fn.isdirectory(undodir) == 0 then
+	vim.fn.mkdir(undodir, "p")
+end
+opt.undodir = undodir
+
+vim.opt.completeopt = "menuone,noinsert,noselect"
+
+-- keymaps
 map("n", "<Esc>", "<cmd>nohlsearch<CR>")
 map("n", "j", "gj")
 map("n", "k", "gk")
@@ -68,398 +75,498 @@ map("n", "<C-k>", "<C-w>k", { noremap = true })
 map("n", "<C-l>", "<C-w>l", { noremap = true })
 map("n", "<leader>nh", ":nohl<CR>")
 
-vim.diagnostic.config({ virtual_text = true })
-map("n", "<leader>dK", vim.diagnostic.open_float)
+-- ## AUTOCMDS
 
--- https://github.com/vuejs/language-tools/wiki/Neovim#configuration
-local vue_language_server_path = vim.fn.stdpath('data') .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
-local vue_plugin = {
-  name = '@vue/typescript-plugin',
-  location = vue_language_server_path,
-  languages = { 'vue' },
-  configNamespace = 'typescript',
-}
-local tsserver_filetypes = {
-  'typescript',
-  'javascript',
-  'javascriptreact',
-  'typescriptreact',
-  'vue',
-}
+local augroup = vim.api.nvim_create_augroup("UserConfig", { clear = true })
 
-require("lazy").setup({
-  spec = {
-    {
-      "folke/tokyonight.nvim",
-      lazy = false,
-      priority = 1000,
-      opts = {
-        -- TODO not working...
-        -- style = "night",
-      },
-      config = function()
-        vim.cmd[[colorscheme tokyonight]]
-      end,
-    },
-    {
-      "nvim-tree/nvim-tree.lua",
-      version = "*",
-      lazy = false,
-      dependencies = {
-        "nvim-tree/nvim-web-devicons",
-      },
-      opts = {
-        actions = {
-          open_file = {
-            -- quit_on_open = true,
-            window_picker = {
-              enable = false
-            },
-          },
-        },
-        update_focused_file = {
-          enable = true,
-        },
-        filters = {
-          custom = {
-            "\\.gd\\.uid$",
-          },
-        },
-      },
-      config = function(_, opts)
-        require("nvim-tree").setup(opts)
-        local api = require("nvim-tree.api")
-        map("n", "<C-s>", api.node.open.horizontal) -- make this like fzf
-        map("n", "<leader>e", "<cmd>NvimTreeToggle<CR>")
-        -- XXX unbind <C-x> ? + check vertical split
-      end,
-    },
-    {
-      "nvim-treesitter/nvim-treesitter",
-      branch = "master",
-      lazy = false,
-      build = ":TSUpdate",
-      opts = {
-        ensure_installed = {
-          "c",
-          "cpp",
-          "css",
-          "html",
-          "lua",
-          "pug",
-          "typescript",
-          "vue",
-        },
-        highlight = {
-          enable = true,
-          additional_vim_regex_highlighting = {
-            "ruby",
-          },
-        },
-        indent = {
-          enable = true,
-          disable = {
-            "ruby",
-          },
-        },
-      },
-      config = function(_, opts)
-         require("nvim-treesitter.configs").setup(opts)
-      end,
-    },
-    {
-      "windwp/nvim-autopairs",
-      event = "InsertEnter",
-      config = true
-    },
-    {
-      "lukas-reineke/indent-blankline.nvim",
-      main = "ibl",
-      ---@module "ibl"
-      ---@type ibl.config
-      opts = {
-        scope = {
-          show_start = false,
-          show_end = false,
-        },
-      },
-    },
-    {
-      "saghen/blink.cmp",
-      version = "1.*",
-      opts = {
-        completion = { documentation = { auto_show = true } },
-        default = { "lsp", "path", "snippets", "buffer" },
-        providers = {
-          snippets = {
-            min_keyword_length = 2,
-            score_offset = 4,
-          },
-          lsp = {
-            min_keyword_length = 3,
-            score_offset = 3,
-          },
-          path = {
-            min_keyword_length = 3,
-            score_offset = 2,
-          },
-          buffer = {
-            min_keyword_length = 5,
-            score_offset = 1,
-          },
-        },
-      },
-    },
-    {
-      "neovim/nvim-lspconfig",
-      dependencies = {
-        "saghen/blink.cmp",
-        "ibhagwan/fzf-lua",
-      },
-      automatic_installation = true,
-      opts = {
-        ensure_installed = {
-          "clangd",
-          "gopls",
-          -- "ts_ls",
-          "vtsls",
-          "vue_ls",
-          "zls",
-        },
-        servers = {
-          clangd = {},
-          gopls = {
-            settings = {
-              gopls = {
-                analyses = {
-                  unusedparams = true,
-                },
-                staticcheck = true,
-                gofumpt = true,
-              },
-            },
-          },
-          lua_ls = {
-            settings = {
-              Lua = {
-                diagnostics = {
-                  globals = { "vim" },
-                },
-                workspace = {
-                  -- Make the server aware of Neovim runtime files
-                  library = vim.api.nvim_get_runtime_file("", true),
-                },
-              },
-            },
-          },
-          ruby_lsp = {
-            init_options = {
-              formatter = 'standard',
-              linters = { 'standard' },
-            },
-          },
-          vtsls = {
-            filetypes = tsserver_filetypes,
-            settings = {
-              vtsls = {
-                tsserver = {
-                  globalPlugins = {
-                    vue_plugin,
-                  },
-                },
-              },
-            },
-          },
-          -- ts_ls = {
-          --   filetypes = tsserver_filetypes,
-          --   init_options = {
-          --     plugins = {
-          --       vue_plugin,
-          --     },
-          --   },
-          -- },
-          vue_ls = {
-            on_init = function(client)
-              client.handlers['tsserver/request'] = function(_, result, context)
-                local ts_clients = vim.lsp.get_clients({ bufnr = context.bufnr, name = 'ts_ls' })
-                local vtsls_clients = vim.lsp.get_clients({ bufnr = context.bufnr, name = 'vtsls' })
-                local clients = {}
-
-                vim.list_extend(clients, ts_clients)
-                vim.list_extend(clients, vtsls_clients)
-
-                if #clients == 0 then
-                  vim.notify('Could not find `vtsls` or `ts_ls` lsp client, `vue_ls` would not work without it.', vim.log.levels.ERROR)
-                  return
-                end
-                local ts_client = clients[1]
-
-                local param = unpack(result)
-                local id, command, payload = unpack(param)
-                ts_client:exec_cmd({
-                  title = 'vue_request_forward', -- You can give title anything as it's used to represent a command in the UI, `:h Client:exec_cmd`
-                  command = 'typescript.tsserverRequest',
-                  arguments = {
-                    command,
-                    payload,
-                  },
-                }, { bufnr = context.bufnr }, function(_, r)
-                  local response = r and r.body
-                  -- TODO: handle error or response nil here, e.g. logging
-                  -- NOTE: Do NOT return if there's an error or no response, just return nil back to the vue_ls to prevent memory leak
-                  local response_data = { { id, response } }
-
-                  ---@diagnostic disable-next-line: param-type-mismatch
-                  client:notify('tsserver/response', response_data)
-                end)
-              end
-            end,
-          },
-          zls = {
-            cmd = { "/home/tjk/zls/0.14.0/zls" },
-            settings = {
-              semantic_tokens = "partial",
-              -- zig_exe_path = "/usr/bin/zig",
-            },
-          },
-          gdscript = {
-            name = "godot",
-            cmd = vim.lsp.rpc.connect("127.0.0.1", 6005),
-          },
-        },
-      },
-      config = function(_, opts)
-        local fzf_lua = require("fzf-lua")
-        for server, config in pairs(opts.servers) do
-          config.capabilities = require('blink.cmp').get_lsp_capabilities(config.capabilities)
-          vim.lsp.config(server, config)
-          vim.lsp.enable({server})
-        end
-        vim.api.nvim_create_autocmd('LspAttach', {
-          callback = function(ev)
-            -- local client = vim.lsp.get_client_by_id(ev.data.client_id)
-            local bufopts = { noremap = true, silent = true, buffer = ev.buf }
-            map("n", "gD", vim.lsp.buf.declaration, bufopts)
-            map("n", "gd", fzf_lua.lsp_definitions, bufopts) -- vim.lsp.buf.definition
-            map("n", "gr", fzf_lua.lsp_references, bufopts) -- vim.lsp.buf.references
-            map("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
-            map("n", "<leader>ca", fzf_lua.lsp_code_actions, bufopts) -- vim.lsp.buf.code_action
-          end
-        })
-      end,
-    },
-    {
-      "mason-org/mason-lspconfig.nvim",
-      opts = {
-        -- TODO current issue: https://github.com/mason-org/mason-lspconfig.nvim/issues/576#issuecomment-2977209530
-        automatic_enable = false
-      },
-      dependencies = {
-        { "mason-org/mason.nvim", opts = {} },
-        "neovim/nvim-lspconfig",
-      },
-    },
-    {
-      -- incredible. so much better than telescope!!
-      "ibhagwan/fzf-lua",
-      dependencies = {
-        "nvim-tree/nvim-web-devicons",
-      },
-      -- TODO or if using mini.icons/mini.nvim
-      -- dependencies = { "echasnovski/mini.icons" },
-      opts = {},
-      config = function()
-        local fzf_lua = require("fzf-lua")
-        fzf_lua.register_ui_select()
-        map("n", "<leader>f", "<cmd>FzfLua files<CR>")
-        map("n", "<leader>/", "<cmd>FzfLua live_grep<CR>")
-        map("n", "<leader>gs", "<cmd>FzfLua git_status<CR>")
-        map("n", "<leader>q", "<cmd>FzfLua diagnostics_document<CR>")
-        map("n", "<leader>Q", "<cmd>FzfLua diagnostics_workspace<CR>")
-      end,
-    },
-    {
-      -- show lsp loading status, etc.
-      "j-hui/fidget.nvim",
-      opts = {},
-    },
-    -- {
-    --   "pmizio/typescript-tools.nvim",
-    --   dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    --   opts = {},
-    -- },
-    -- TODO uninstall? or use once integrated with diagnostics
-    -- https://github.com/wfxr/minimap.vim?tab=readme-ov-file#integrated-with-diagnostics-or-git-status-plugins
-    -- {
-    --   "wfxr/minimap.vim",
-    --   build = "cargo install --locked code-minimap",
-    --   lazy = false,
-    --   cmd = { "Minimap", "MinimapClose", "MinimapToggle", "MinimapRefresh", "MinimapUpdateHighlight" },
-    --   init = function()
-    --     vim.g.minimap_width = 10
-    --     vim.g.minimap_auto_start = true
-    --     vim.g.minimap_auto_start_win_enter = true
-    --   end,
-    -- },
-    -- TODO maybe remove this too... i just want vscode style diagnostics throughout file border
-    -- {
-    --   "gorbit99/codewindow.nvim",
-    --   opts = {
-    --     auto_enable = true,
-    --     window_border = "shadow",
-    --     show_cursor = false,
-    --   },
-    --   config = function(_, opts)
-    --     local codewindow = require("codewindow")
-    --     codewindow.setup(opts)
-    --     codewindow.apply_default_keybinds()
-    --   end,
-    -- },
-    -- {
-    --   "aserowy/tmux.nvim",
-    --   config = function()
-    --     require("tmux").setup({
-    --       copy_sync = {
-    --         enable = false,
-    --       },
-    --     })
-    --   end,
-    -- },
-    -- {
-    --   "ziglang/zig.vim",
-    -- },
-  },
-  install = { colorscheme = { "tokyonight" } },
-  -- disable automatically checking for plugin updates
-  -- checker = { enabled = true },
-})
-
+-- format on save
 vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*.go",
-  callback = function()
-    local params = vim.lsp.util.make_range_params()
-    params.context = {only = {"source.organizeImports"}}
-    -- buf_request_sync defaults to a 1000ms timeout. Depending on your
-    -- machine and codebase, you may want longer. Add an additional
-    -- argument after params if you find that you have to write the file
-    -- twice for changes to be saved.
-    -- E.g., vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
-    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
-    for cid, res in pairs(result or {}) do
-      for _, r in pairs(res.result or {}) do
-        if r.edit then
-          local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
-          vim.lsp.util.apply_workspace_edit(r.edit, enc)
-        end
-      end
-    end
-    vim.lsp.buf.format({async = false})
-  end
+	group = augroup,
+	pattern = {
+		"*.lua",
+		"*.py",
+		"*.go",
+		"*.js",
+		"*.jsx",
+		"*.ts",
+		"*.tsx",
+		"*.json",
+		"*.css",
+		"*.scss",
+		"*.html",
+		"*.sh",
+		"*.bash",
+		"*.zsh",
+		"*.c",
+		"*.cpp",
+		"*.h",
+		"*.hpp",
+	},
+	callback = function(args)
+		-- avoid formatting non-file buffers (helps prevent weird write prompts)
+		if vim.bo[args.buf].buftype ~= "" then
+			return
+		end
+		if not vim.bo[args.buf].modifiable then
+			return
+		end
+		if vim.api.nvim_buf_get_name(args.buf) == "" then
+			return
+		end
+		-- TODO here do organizeImports, etc. if possible
+		local has_efm = false
+		for _, c in ipairs(vim.lsp.get_clients({ bufnr = args.buf })) do
+			if c.name == "efm" then
+				has_efm = true
+				break
+			end
+		end
+		if not has_efm then
+			return
+		end
+		pcall(vim.lsp.buf.format, {
+			bufnr = args.buf,
+			timeout_ms = 2000,
+			filter = function(c)
+				return c.name == "efm"
+			end,
+		})
+	end,
 })
 
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = { "*.c", "*.h" },
-  callback = function()
-    vim.lsp.buf.format({ async = false })
-  end,
+-- highlight yanked text
+vim.api.nvim_create_autocmd("TextYankPost", {
+	group = augroup,
+	callback = function()
+		vim.highlight.on_yank()
+	end,
 })
+
+-- return to last cursor position
+vim.api.nvim_create_autocmd("BufReadPost", {
+	group = augroup,
+	callback = function()
+		if vim.o.diff then
+			return
+		end
+		local last_pos = vim.api.nvim_buf_get_mark(0, '"') -- {line, col}
+		local last_line = vim.api.nvim_buf_line_count(0)
+		local row = last_pos[1]
+		if row < 1 or row > last_line then
+			return
+		end
+		pcall(vim.api.nvim_win_set_cursor, 0, last_pos)
+	end,
+})
+
+-- TODO move this up!!!
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+-- 	group = augroup,
+--   pattern = "*.go",
+--   callback = function()
+--     local params = vim.lsp.util.make_range_params()
+--     params.context = { only = { "source.organizeImports" } }
+--     -- buf_request_sync defaults to a 1000ms timeout. Depending on your
+--     -- machine and codebase, you may want longer. Add an additional
+--     -- argument after params if you find that you have to write the file
+--     -- twice for changes to be saved.
+--     -- E.g., vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
+--     local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
+--     for cid, res in pairs(result or {}) do
+--       for _, r in pairs(res.result or {}) do
+--         if r.edit then
+--           local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+--           vim.lsp.util.apply_workspace_edit(r.edit, enc)
+--         end
+--       end
+--     end
+--     vim.lsp.buf.format({async = false})
+--   end
+-- })
+
+-- wrap, linebreak and spellcheck on markdown and text files
+vim.api.nvim_create_autocmd("FileType", {
+	group = augroup,
+	pattern = { "markdown", "text", "gitcommit" },
+	callback = function()
+		vim.opt_local.wrap = true
+		vim.opt_local.linebreak = true
+		vim.opt_local.spell = true
+	end,
+})
+
+-- install plugins
+vim.pack.add({
+	"https://www.github.com/echasnovski/mini.nvim",
+	"https://www.github.com/ibhagwan/fzf-lua",
+	{
+		src = "https://github.com/nvim-treesitter/nvim-treesitter",
+		branch = "main",
+		build = ":TSUpdate",
+	},
+	"https://www.github.com/neovim/nvim-lspconfig",
+	"https://github.com/mason-org/mason.nvim",
+	"https://github.com/mason-org/mason-lspconfig.nvim",
+	"https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim",
+	"https://github.com/creativenull/efmls-configs-nvim",
+	{
+		-- NOTE: blink.cmp v2 is now the actively developed branch (breaking
+		-- changes vs v1). Staying pinned to v1 here deliberately for stability.
+		-- Revisit this pin when ready to migrate — v2 requires installing
+		-- blink.lib as a native dependency outside vim.pack.
+		src = "https://github.com/saghen/blink.cmp",
+		version = vim.version.range("1.*"),
+	},
+	"https://github.com/mrcjkb/rustaceanvim",
+})
+
+-- ## CONFIGURE PLUGINS
+
+require("mini.icons").setup({})
+require("mini.notify").setup({})
+require("mini.trailspace").setup({})
+require("mini.clue").setup({
+	triggers = {
+		{ mode = "n", keys = "<leader>" },
+		{ mode = "x", keys = "<leader>" },
+		{ mode = "n", keys = "g" },
+		{ mode = "n", keys = "[" },
+		{ mode = "n", keys = "]" },
+	},
+	clues = {
+		require("mini.clue").gen_clues.builtin_completion(),
+	},
+})
+
+local setup_treesitter = function()
+	local treesitter = require("nvim-treesitter")
+	treesitter.setup({})
+	local ensure_installed = {
+		"bash",
+		"c",
+		"c_sharp",
+		"cpp",
+		"css",
+		"go",
+		"html",
+		"javascript",
+		"json",
+		"lua",
+		"markdown",
+		"python",
+		"rust",
+		"svelte",
+		"typescript",
+		"vim",
+		"vimdoc",
+		"vue",
+	}
+	local config = require("nvim-treesitter.config")
+	local already_installed = config.get_installed()
+	local parsers_to_install = {}
+	for _, parser in ipairs(ensure_installed) do
+		if not vim.tbl_contains(already_installed, parser) then
+			table.insert(parsers_to_install, parser)
+		end
+	end
+	if #parsers_to_install > 0 then
+		treesitter.install(parsers_to_install)
+	end
+	local group = vim.api.nvim_create_augroup("TreeSitterConfig", { clear = true })
+	vim.api.nvim_create_autocmd("FileType", {
+		group = group,
+		callback = function(args)
+			if vim.list_contains(config.get_installed(), vim.treesitter.language.get_lang(args.match)) then
+				vim.treesitter.start(args.buf)
+			end
+		end,
+	})
+end
+setup_treesitter()
+
+local fzf = require("fzf-lua")
+fzf.setup({
+	keymap = {
+		fzf = {
+			["ctrl-y"] = "accept",
+		},
+	},
+})
+map("n", "<leader>ff", fzf.files, { desc = "Find files" })
+map("n", "<leader>fg", fzf.live_grep, { desc = "Live Grep" })
+-- open fzf right away if opening a directory
+vim.api.nvim_create_autocmd("VimEnter", {
+	callback = function()
+		local first_arg = vim.fn.argv(0)
+		if
+			vim.fn.argc() == 0
+			or type(first_arg) == "table"
+			or type(first_arg) == ""
+			or vim.fn.isdirectory(vim.fn.expand(first_arg)) == 1
+		then
+			-- Wipe the directory buffer so it doesn't stay open in the background
+			vim.cmd("bwipeout!")
+			vim.cmd("FzfLua files")
+		end
+	end,
+})
+
+local diagnostic_signs = {
+	Error = "\u{f057} ",
+	Warn = "\u{f071} ",
+	Hint = "\u{ea61}",
+	Info = "\u{f05a}",
+}
+vim.diagnostic.config({
+	virtual_text = true,
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = diagnostic_signs.Error,
+			[vim.diagnostic.severity.WARN] = diagnostic_signs.Warn,
+			[vim.diagnostic.severity.INFO] = diagnostic_signs.Info,
+			[vim.diagnostic.severity.HINT] = diagnostic_signs.Hint,
+		},
+	},
+	underline = true,
+	update_in_insert = false,
+	severity_sort = true,
+	float = {
+		border = "rounded",
+		source = true,
+		header = "",
+		prefix = "",
+		focusable = false,
+		style = "minimal",
+	},
+})
+map("n", "<leader>q", function()
+	vim.diagnostic.setloclist({ open = true })
+end)
+
+require("mason").setup({})
+require("mason-lspconfig").setup({})
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = augroup,
+	callback = function(ev)
+		local client = vim.lsp.get_client_by_id(ev.data.client_id)
+		if not client then
+			return
+		end
+
+		local bufnr = ev.buf
+		local opts = { noremap = true, silent = true, buffer = bufnr }
+
+		map("n", "gd", function()
+			fzf.lsp_definitions({ jump1 = true })
+		end, opts)
+
+		map("n", "gD", vim.lsp.buf.definition, opts)
+
+		map("n", "gS", function()
+			vim.cmd("vsplit")
+			vim.lsp.buf.definition()
+		end, opts)
+
+		map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+		map("n", "<leader>rn", vim.lsp.buf.rename, opts)
+
+		-- XXX remove this one?
+		map("n", "<leader>dK", vim.diagnostic.open_float)
+		map("n", "<leader>D", function()
+			vim.diagnostic.open_float({ scope = "line" })
+		end, opts)
+		map("n", "<leader>d", function()
+			vim.diagnostic.open_float({ scope = "cursor" })
+		end, opts)
+		map("n", "<leader>nd", function()
+			vim.diagnostic.jump({ count = 1 })
+		end, opts)
+
+		map("n", "<leader>pd", function()
+			vim.diagnostic.jump({ count = -1 })
+		end, opts)
+
+		map("n", "K", vim.lsp.buf.hover, opts)
+
+		map("n", "<leader>fr", function()
+			fzf.lsp_references()
+		end, opts)
+		map("n", "<leader>ft", function()
+			fzf.lsp_typedefs()
+		end, opts)
+		map("n", "<leader>fs", function()
+			fzf.lsp_document_symbols()
+		end, opts)
+		map("n", "<leader>fw", function()
+			fzf.lsp_workspace_symbols()
+		end, opts)
+		map("n", "<leader>fi", function()
+			fzf.lsp_implementations()
+		end, opts)
+
+		if client:supports_method("textDocument/codeAction", bufnr) then
+			map("n", "<leader>oi", function()
+				vim.lsp.buf.code_action({
+					context = { only = { "source.organizeImports" }, diagnostics = {} },
+					apply = true,
+					bufnr = bufnr,
+				})
+				vim.defer_fn(function()
+					vim.lsp.buf.format({ bufnr = bufnr })
+				end, 50)
+			end, opts)
+		end
+	end,
+})
+
+require("blink.cmp").setup({
+	keymap = {
+		preset = "none",
+		["<C-Space>"] = { "show", "show_documentation", "hide_documentation", "hide" },
+		["<C-y>"] = { "select_and_accept" },
+		["<C-n>"] = { "select_next", "fallback" },
+		["<C-p>"] = { "select_prev", "fallback" },
+		["<C-b>"] = { "scroll_documentation_up", "fallback" },
+		["<C-f>"] = { "scroll_documentation_down", "fallback" },
+		["<Tab>"] = { "snippet_forward", "fallback" },
+		["<S-Tab>"] = { "snippet_backward", "fallback" },
+	},
+	appearance = { nerd_font_variant = "mono" },
+	completion = {
+		menu = {
+			auto_show = function()
+				return vim.bo.filetype ~= "markdown"
+			end,
+		},
+	},
+	-- signature help while typing function calls (was previously unset)
+	signature = { enabled = true },
+	sources = { default = { "lsp", "path", "buffer", "snippets" } },
+	-- snippets now use blink's native engine — LuaSnip dependency removed
+	fuzzy = {
+		implementation = "prefer_rust",
+		prebuilt_binaries = { download = true },
+	},
+})
+
+-- lsps
+do
+	local orig = vim.lsp.util.open_floating_preview
+	function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+		opts = opts or {}
+		opts.border = opts.border or "rounded"
+		return orig(contents, syntax, opts, ...)
+	end
+	local capabilities = require("blink.cmp").get_lsp_capabilities()
+	vim.lsp.config["*"] = {
+		capabilities = capabilities,
+	}
+	local ensure_installed = {}
+	local lsp_enable = function(name, config_opts, tool_names)
+		for _, tool_name in ipairs(tool_names or {}) do
+			table.insert(ensure_installed, tool_name)
+		end
+		vim.lsp.config(name, config_opts or {})
+		vim.lsp.enable(name)
+	end
+	lsp_enable("bashls")
+	lsp_enable("clangd")
+	do
+		local luacheck = require("efmls-configs.linters.luacheck")
+		table.insert(ensure_installed, "luacheck")
+		local stylua = require("efmls-configs.formatters.stylua")
+		table.insert(ensure_installed, "stylua")
+		local ruff_lint = require("efmls-configs.linters.ruff")
+		local ruff_format = require("efmls-configs.formatters.ruff")
+		table.insert(ensure_installed, "ruff")
+		-- XXX can we use oxlint, etc. here instead maybe?
+		local prettier_d = require("efmls-configs.formatters.prettier_d")
+		table.insert(ensure_installed, "prettierd")
+		local eslint_d = require("efmls-configs.linters.eslint_d")
+		table.insert(ensure_installed, "eslint_d")
+		local fixjson = require("efmls-configs.formatters.fixjson")
+		table.insert(ensure_installed, "fixjson")
+		local shellcheck = require("efmls-configs.linters.shellcheck")
+		local shfmt = require("efmls-configs.formatters.shfmt")
+		table.insert(ensure_installed, "shfmt")
+		local cpplint = require("efmls-configs.linters.cpplint")
+		table.insert(ensure_installed, "cpplint")
+		local clangfmt = require("efmls-configs.formatters.clang_format")
+		table.insert(ensure_installed, "clang-format")
+		local go_revive = require("efmls-configs.linters.go_revive")
+		table.insert(ensure_installed, "revive")
+		local gofumpt = require("efmls-configs.formatters.gofumpt")
+		table.insert(ensure_installed, "gofumpt")
+		lsp_enable("efm", {
+			filetypes = {
+				"c",
+				"cpp",
+				"css",
+				"go",
+				"html",
+				"javascript",
+				"javascriptreact",
+				"json",
+				"jsonc",
+				"lua",
+				"markdown",
+				"python",
+				"sh",
+				"typescript",
+				"typescriptreact",
+				"vue",
+				"svelte",
+			},
+			init_options = { documentFormatting = true },
+			settings = {
+				languages = {
+					c = { clangfmt },
+					go = { gofumpt, go_revive },
+					cpp = { clangfmt, cpplint },
+					css = { prettier_d },
+					html = { prettier_d },
+					javascript = { eslint_d, prettier_d },
+					javascriptreact = { eslint_d, prettier_d },
+					json = { eslint_d, fixjson },
+					jsonc = { eslint_d, fixjson },
+					lua = { luacheck, stylua },
+					markdown = { prettier_d },
+					python = { ruff_lint, ruff_format },
+					sh = { shellcheck, shfmt },
+					typescript = { eslint_d, prettier_d },
+					typescriptreact = { eslint_d, prettier_d },
+					vue = { eslint_d, prettier_d },
+					svelte = { eslint_d, prettier_d },
+				},
+			},
+		})
+	end
+	lsp_enable("gopls")
+	lsp_enable("lua_ls", {
+		settings = {
+			Lua = {
+				runtime = { version = "LuaJIT" },
+				workspace = {
+					library = vim.api.nvim_get_runtime_file("", true),
+					checkThirdParty = false,
+				},
+				diagnostics = { globals = { "vim" } },
+				telemetry = { enable = false },
+			},
+		},
+	})
+	lsp_enable("pyright")
+	lsp_enable("ts_ls")
+	vim.g.rustaceanvim = {
+		server = {
+			capabilities = capabilities,
+		},
+	}
+
+	require("mason-tool-installer").setup({
+		ensure_installed = ensure_installed,
+		integrations = {
+			["mason-lspconfig"] = true,
+		},
+	})
+end
