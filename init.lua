@@ -73,6 +73,19 @@ map("n", "<leader>dK", vim.diagnostic.open_float)
 
 -- https://github.com/vuejs/language-tools/wiki/Neovim#configuration
 local vue_language_server_path = vim.fn.stdpath('data') .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
+local vue_plugin = {
+  name = '@vue/typescript-plugin',
+  location = vue_language_server_path,
+  languages = { 'vue' },
+  configNamespace = 'typescript',
+}
+local tsserver_filetypes = {
+  'typescript',
+  'javascript',
+  'javascriptreact',
+  'typescriptreact',
+  'vue',
+}
 
 require("lazy").setup({
   spec = {
@@ -107,6 +120,11 @@ require("lazy").setup({
         update_focused_file = {
           enable = true,
         },
+        filters = {
+          custom = {
+            "\\.gd\\.uid$",
+          },
+        },
       },
       config = function(_, opts)
         require("nvim-tree").setup(opts)
@@ -123,6 +141,8 @@ require("lazy").setup({
       build = ":TSUpdate",
       opts = {
         ensure_installed = {
+          "c",
+          "cpp",
           "css",
           "html",
           "lua",
@@ -169,6 +189,25 @@ require("lazy").setup({
       version = "1.*",
       opts = {
         completion = { documentation = { auto_show = true } },
+        default = { "lsp", "path", "snippets", "buffer" },
+        providers = {
+          snippets = {
+            min_keyword_length = 2,
+            score_offset = 4,
+          },
+          lsp = {
+            min_keyword_length = 3,
+            score_offset = 3,
+          },
+          path = {
+            min_keyword_length = 3,
+            score_offset = 2,
+          },
+          buffer = {
+            min_keyword_length = 5,
+            score_offset = 1,
+          },
+        },
       },
     },
     {
@@ -180,12 +219,26 @@ require("lazy").setup({
       automatic_installation = true,
       opts = {
         ensure_installed = {
+          "clangd",
           "gopls",
+          -- "ts_ls",
           "vtsls",
           "vue_ls",
+          "zls",
         },
         servers = {
-          gopls = {},
+          clangd = {},
+          gopls = {
+            settings = {
+              gopls = {
+                analyses = {
+                  unusedparams = true,
+                },
+                staticcheck = true,
+                gofumpt = true,
+              },
+            },
+          },
           lua_ls = {
             settings = {
               Lua = {
@@ -206,33 +259,37 @@ require("lazy").setup({
             },
           },
           vtsls = {
-            filetypes = {
-              "javascript",
-              "typescript",
-              "vue",
-            },
+            filetypes = tsserver_filetypes,
             settings = {
               vtsls = {
                 tsserver = {
                   globalPlugins = {
-                    {
-                      name = '@vue/typescript-plugin',
-                      location = vue_language_server_path,
-                      languages = { 'vue' },
-                      configNamespace = 'typescript',
-                    },
+                    vue_plugin,
                   },
                 },
               },
             },
           },
+          -- ts_ls = {
+          --   filetypes = tsserver_filetypes,
+          --   init_options = {
+          --     plugins = {
+          --       vue_plugin,
+          --     },
+          --   },
+          -- },
           vue_ls = {
             on_init = function(client)
               client.handlers['tsserver/request'] = function(_, result, context)
-                local clients = vim.lsp.get_clients({ bufnr = context.bufnr, name = 'vtsls' })
-                if #clients == 0 then
+                local ts_clients = vim.lsp.get_clients({ bufnr = context.bufnr, name = 'ts_ls' })
+                local vtsls_clients = vim.lsp.get_clients({ bufnr = context.bufnr, name = 'vtsls' })
+                local clients = {}
 
-                  vim.notify('Could not find `vtsls` lsp client, `vue_ls` would not work without it.', vim.log.levels.ERROR)
+                vim.list_extend(clients, ts_clients)
+                vim.list_extend(clients, vtsls_clients)
+
+                if #clients == 0 then
+                  vim.notify('Could not find `vtsls` or `ts_ls` lsp client, `vue_ls` would not work without it.', vim.log.levels.ERROR)
                   return
                 end
                 local ts_client = clients[1]
@@ -244,11 +301,13 @@ require("lazy").setup({
                   command = 'typescript.tsserverRequest',
                   arguments = {
                     command,
-
                     payload,
                   },
                 }, { bufnr = context.bufnr }, function(_, r)
-                  local response_data = { { id, r.body } }
+                  local response = r and r.body
+                  -- TODO: handle error or response nil here, e.g. logging
+                  -- NOTE: Do NOT return if there's an error or no response, just return nil back to the vue_ls to prevent memory leak
+                  local response_data = { { id, response } }
 
                   ---@diagnostic disable-next-line: param-type-mismatch
                   client:notify('tsserver/response', response_data)
@@ -256,14 +315,25 @@ require("lazy").setup({
               end
             end,
           },
+          zls = {
+            cmd = { "/home/tjk/zls/0.14.0/zls" },
+            settings = {
+              semantic_tokens = "partial",
+              -- zig_exe_path = "/usr/bin/zig",
+            },
+          },
+          gdscript = {
+            name = "godot",
+            cmd = vim.lsp.rpc.connect("127.0.0.1", 6005),
+          },
         },
       },
       config = function(_, opts)
-        local lspconfig = require("lspconfig")
         local fzf_lua = require("fzf-lua")
         for server, config in pairs(opts.servers) do
           config.capabilities = require('blink.cmp').get_lsp_capabilities(config.capabilities)
-          lspconfig[server].setup(config)
+          vim.lsp.config(server, config)
+          vim.lsp.enable({server})
         end
         vim.api.nvim_create_autocmd('LspAttach', {
           callback = function(ev)
@@ -355,8 +425,41 @@ require("lazy").setup({
     --     })
     --   end,
     -- },
+    -- {
+    --   "ziglang/zig.vim",
+    -- },
   },
   install = { colorscheme = { "tokyonight" } },
   -- disable automatically checking for plugin updates
   -- checker = { enabled = true },
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.go",
+  callback = function()
+    local params = vim.lsp.util.make_range_params()
+    params.context = {only = {"source.organizeImports"}}
+    -- buf_request_sync defaults to a 1000ms timeout. Depending on your
+    -- machine and codebase, you may want longer. Add an additional
+    -- argument after params if you find that you have to write the file
+    -- twice for changes to be saved.
+    -- E.g., vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
+    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
+    for cid, res in pairs(result or {}) do
+      for _, r in pairs(res.result or {}) do
+        if r.edit then
+          local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+          vim.lsp.util.apply_workspace_edit(r.edit, enc)
+        end
+      end
+    end
+    vim.lsp.buf.format({async = false})
+  end
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = { "*.c", "*.h" },
+  callback = function()
+    vim.lsp.buf.format({ async = false })
+  end,
 })
