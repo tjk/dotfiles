@@ -220,6 +220,7 @@ vim.pack.add({
 	"https://github.com/mrcjkb/rustaceanvim",
 	"https://github.com/b0o/SchemaStore.nvim",
 	"https://github.com/windwp/nvim-autopairs",
+	"https://github.com/nvim-lualine/lualine.nvim",
 })
 
 -- ## CONFIGURE PLUGINS
@@ -241,6 +242,8 @@ require("mini.clue").setup({
 })
 
 require("nvim-autopairs").setup({})
+
+require("lualine").setup({})
 
 local setup_treesitter = function()
 	local treesitter = require("nvim-treesitter")
