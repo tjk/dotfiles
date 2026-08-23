@@ -364,9 +364,11 @@ vim.diagnostic.config({
 		style = "minimal",
 	},
 })
-map("n", "<leader>q", function()
-	vim.diagnostic.setloclist({ open = true })
-end)
+map("n", "<leader>q", fzf.diagnostics_document)
+map("n", "<leader>Q", fzf.diagnostics_workspace)
+-- map("n", "<leader>q", function()
+-- 	vim.diagnostic.setloclist({ open = true })
+-- end)
 
 require("mason").setup({})
 require("mason-lspconfig").setup({})
