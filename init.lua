@@ -299,8 +299,26 @@ fzf.setup({
 		},
 	},
 })
-map("n", "<leader>ff", fzf.files, { desc = "Find files" })
-map("n", "<leader>fg", fzf.live_grep, { desc = "Live Grep" })
+map("n", "<leader>f", fzf.files, { desc = "Find files" })
+map("n", "<leader>g", fzf.live_grep, { desc = "Live grep" })
+local function search_content_and_filename()
+	fzf.grep({
+		-- Passing an empty string pulls every single line of text from your project asynchronously
+		search = "",
+		prompt = "Find Anything> ",
+		-- Crucial: This overrides the default ripgrep options to ensure the path is searchable
+		rg_opts = "--column --line-number --no-heading --color=never --smart-case --with-filename",
+		fzf_opts = {
+			-- Set to false so fzf evaluates your typing across the entire line
+			-- (icon + path string + code contents) simultaneously
+			["--nth"] = false,
+		},
+		-- Explicitly tell fzf-lua to auto-detect and color your file icons natively
+		file_icons = true,
+		color_icons = true,
+	})
+end
+map("n", "<leader>/", search_content_and_filename)
 -- open fzf right away if opening a directory
 vim.api.nvim_create_autocmd("VimEnter", {
 	callback = function()
@@ -313,7 +331,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 		then
 			-- Wipe the directory buffer so it doesn't stay open in the background
 			vim.cmd("bwipeout!")
-			vim.cmd("FzfLua files")
+			search_content_and_filename()
 		end
 	end,
 })
@@ -395,21 +413,21 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 		map("n", "K", vim.lsp.buf.hover, opts)
 
-		map("n", "<leader>fr", function()
-			fzf.lsp_references()
-		end, opts)
-		map("n", "<leader>ft", function()
-			fzf.lsp_typedefs()
-		end, opts)
-		map("n", "<leader>fs", function()
-			fzf.lsp_document_symbols()
-		end, opts)
-		map("n", "<leader>fw", function()
-			fzf.lsp_workspace_symbols()
-		end, opts)
-		map("n", "<leader>fi", function()
-			fzf.lsp_implementations()
-		end, opts)
+		-- map("n", "<leader>fr", function()
+		-- 	fzf.lsp_references()
+		-- end, opts)
+		-- map("n", "<leader>ft", function()
+		-- 	fzf.lsp_typedefs()
+		-- end, opts)
+		-- map("n", "<leader>fs", function()
+		-- 	fzf.lsp_document_symbols()
+		-- end, opts)
+		-- map("n", "<leader>fw", function()
+		-- 	fzf.lsp_workspace_symbols()
+		-- end, opts)
+		-- map("n", "<leader>fi", function()
+		-- 	fzf.lsp_implementations()
+		-- end, opts)
 
 		if client:supports_method("textDocument/codeAction", bufnr) then
 			map("n", "<leader>oi", function()
