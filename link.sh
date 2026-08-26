@@ -5,7 +5,7 @@ test -e ~/.config/alacritty || \
 test -e ~/.config/fish || \
   ln -sf $(pwd)/fish ~/.config/fish
 test -e ~/.config/nvim || \
-  ln -sf $(pwd)/lazynvim ~/.config/nvim
+  mkdir ~/.config/nvim && ln -sf $(pwd)/init.lua ~/.config/nvim/init.lua
 test -e ~/.config/rofi || \
   ln -sf $(pwd)/rofi ~/.config/rofi
 test -e ~/.config/sway || \
