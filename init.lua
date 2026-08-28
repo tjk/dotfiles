@@ -1,15 +1,35 @@
+-- Inspo:
+-- * https://github.com/radleylewis/nvim-lite
 -- Dependencies:
 -- * tree-sitter-cli
 -- * luarocks
 
+-- TODO:
+-- figure out ff -> <leader>f
+-- move <leader>g to <leader>/ ?
+-- get rid of current <leader>/
+-- find token under cursor in project with fzf
+-- vim-tree
+-- tmux navigation thing
+-- gD should go to header file?
+
 local opt = vim.opt
 local map = vim.keymap.set
+
+pcall(vim.keymap.del, "n", "gr")
+
+local function with_desc(opts, desc)
+	return vim.tbl_extend("force", opts, { desc = desc })
+end
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+
+vim.g.load_doxygen_syntax = 1
+vim.g.c_syntax_for_h = 1
 
 opt.termguicolors = true
 
@@ -83,24 +103,25 @@ local augroup = vim.api.nvim_create_augroup("UserConfig", { clear = true })
 vim.api.nvim_create_autocmd("BufWritePre", {
 	group = augroup,
 	pattern = {
-		"*.lua",
-		"*.py",
-		"*.go",
-		"*.js",
-		"*.jsx",
-		"*.ts",
-		"*.tsx",
-		"*.json",
-		"*.css",
-		"*.scss",
-		"*.html",
-		"*.sh",
 		"*.bash",
-		"*.zsh",
 		"*.c",
 		"*.cpp",
+		"*.css",
+		"*.go",
 		"*.h",
 		"*.hpp",
+		"*.html",
+		"*.js",
+		"*.json",
+		"*.jsx",
+		"*.lua",
+		"*.py",
+		"*.scss",
+		"*.sh",
+		"*.slang",
+		"*.ts",
+		"*.tsx",
+		"*.zsh",
 	},
 	callback = function(args)
 		-- avoid formatting non-file buffers (helps prevent weird write prompts)
@@ -228,7 +249,14 @@ vim.pack.add({
 require("mini.icons").setup({})
 require("mini.notify").setup({})
 require("mini.trailspace").setup({})
-require("mini.clue").setup({
+require("mini.diff").setup({
+	-- view = {
+	-- 	style = "sign",
+	-- 	signs = { add = "▎", change = "▎", delete = "▎" },
+	-- },
+})
+local miniclue = require("mini.clue")
+miniclue.setup({
 	triggers = {
 		{ mode = "n", keys = "<leader>" },
 		{ mode = "x", keys = "<leader>" },
@@ -237,7 +265,7 @@ require("mini.clue").setup({
 		{ mode = "n", keys = "]" },
 	},
 	clues = {
-		require("mini.clue").gen_clues.builtin_completion(),
+		miniclue.gen_clues.builtin_completion(),
 	},
 })
 
@@ -262,6 +290,7 @@ local setup_treesitter = function()
 		"markdown",
 		"python",
 		"rust",
+		"slang",
 		"svelte",
 		"typescript",
 		"vim",
@@ -293,6 +322,7 @@ setup_treesitter()
 
 local fzf = require("fzf-lua")
 fzf.setup({
+	ui_select = {},
 	keymap = {
 		fzf = {
 			["ctrl-y"] = "accept",
@@ -300,25 +330,8 @@ fzf.setup({
 	},
 })
 map("n", "<leader>f", fzf.files, { desc = "Find files" })
-map("n", "<leader>g", fzf.live_grep, { desc = "Live grep" })
-local function search_content_and_filename()
-	fzf.grep({
-		-- Passing an empty string pulls every single line of text from your project asynchronously
-		search = "",
-		prompt = "Find Anything> ",
-		-- Crucial: This overrides the default ripgrep options to ensure the path is searchable
-		rg_opts = "--column --line-number --no-heading --color=never --smart-case --with-filename",
-		fzf_opts = {
-			-- Set to false so fzf evaluates your typing across the entire line
-			-- (icon + path string + code contents) simultaneously
-			["--nth"] = false,
-		},
-		-- Explicitly tell fzf-lua to auto-detect and color your file icons natively
-		file_icons = true,
-		color_icons = true,
-	})
-end
-map("n", "<leader>/", search_content_and_filename)
+map("n", "<leader>/", fzf.live_grep, { desc = "Live grep" })
+map("n", "<leader>#", fzf.grep_cword, { desc = "Grep word under cursor" })
 -- open fzf right away if opening a directory
 vim.api.nvim_create_autocmd("VimEnter", {
 	callback = function()
@@ -331,7 +344,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 		then
 			-- Wipe the directory buffer so it doesn't stay open in the background
 			vim.cmd("bwipeout!")
-			search_content_and_filename()
+			fzf.files()
 		end
 	end,
 })
@@ -383,11 +396,24 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		local bufnr = ev.buf
 		local opts = { noremap = true, silent = true, buffer = bufnr }
 
+		-- gf go to file under cursor is builtin
+
 		map("n", "gd", function()
 			fzf.lsp_definitions({ jump1 = true })
-		end, opts)
+		end, with_desc(opts, "Go to definition"))
 
-		map("n", "gD", vim.lsp.buf.definition, opts)
+		map("n", "gD", function()
+			fzf.lsp_declarations({ jump1 = true })
+		end, with_desc(opts, "Go to declaration"))
+
+		map("n", "gi", function()
+			-- fzf.lsp_implementations({ jump1 = true })
+			vim.lsp.buf.implementation()
+		end, with_desc(opts, "Go to implementation"))
+
+		map("n", "gr", function()
+			fzf.lsp_references()
+		end, with_desc(opts, "See references"))
 
 		map("n", "gS", function()
 			vim.cmd("vsplit")
@@ -443,6 +469,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 				end, 50)
 			end, opts)
 		end
+
+		miniclue.ensure_buf_triggers()
 	end,
 })
 
@@ -522,6 +550,7 @@ do
 		table.insert(ensure_installed, "revive")
 		local gofumpt = require("efmls-configs.formatters.gofumpt")
 		table.insert(ensure_installed, "gofumpt")
+		-- TODO slang ?
 		lsp_enable("efm", {
 			filetypes = {
 				"c",
@@ -589,6 +618,7 @@ do
 		},
 	})
 	lsp_enable("pyright")
+	lsp_enable("slangd")
 	lsp_enable("ts_ls")
 	vim.g.rustaceanvim = {
 		server = {
@@ -620,4 +650,3 @@ vim.filetype.add({
 		gotmpl = "gotmpl",
 	},
 })
-vim.g.load_doxygen_syntax = 1
