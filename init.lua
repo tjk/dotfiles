@@ -79,7 +79,9 @@ if vim.fn.isdirectory(undodir) == 0 then
 end
 opt.undodir = undodir
 
-vim.opt.completeopt = "menuone,noinsert,noselect"
+opt.completeopt = "menuone,noinsert,noselect"
+
+opt.timeoutlen = 200
 
 -- keymaps
 map("n", "<Esc>", "<cmd>nohlsearch<CR>")
@@ -87,7 +89,8 @@ map("n", "j", "gj")
 map("n", "k", "gk")
 map("n", "gj", "j")
 map("n", "gk", "k")
-map("n", "<leader>ev", "<cmd>edit ~/.config/nvim/init.lua<CR>")
+-- collides with <leader>e
+-- map("n", "<leader>ev", "<cmd>edit ~/.config/nvim/init.lua<CR>")
 map("n", "<leader>sv", "<cmd>source ~/.config/nvim/init.lua<CR>")
 map("n", "<C-h>", "<C-w>h", { noremap = true })
 map("n", "<C-j>", "<C-w>j", { noremap = true })
@@ -242,6 +245,7 @@ vim.pack.add({
 	"https://github.com/b0o/SchemaStore.nvim",
 	"https://github.com/windwp/nvim-autopairs",
 	"https://github.com/nvim-lualine/lualine.nvim",
+	"https://github.com/nvim-tree/nvim-tree.lua",
 })
 
 -- ## CONFIGURE PLUGINS
@@ -270,6 +274,9 @@ miniclue.setup({
 })
 
 require("nvim-autopairs").setup({})
+
+require("nvim-tree").setup({})
+map("n", "<leader>e", "<cmd>NvimTreeToggle<CR>")
 
 require("lualine").setup({})
 
@@ -346,6 +353,8 @@ vim.api.nvim_create_autocmd("VimEnter", {
 			vim.cmd("bwipeout!")
 			fzf.files()
 		end
+
+		require("nvim-tree.api").tree.open()
 	end,
 })
 
