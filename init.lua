@@ -578,6 +578,8 @@ do
 		table.insert(ensure_installed, "revive")
 		local gofumpt = require("efmls-configs.formatters.gofumpt")
 		table.insert(ensure_installed, "gofumpt")
+		local tf_fmt = require("efmls-configs.formatters.terraform_fmt")
+		table.insert(ensure_installed, "terraform")
 		-- TODO slang ?
 		lsp_enable("efm", {
 			filetypes = {
@@ -594,6 +596,8 @@ do
 				"markdown",
 				"python",
 				"sh",
+				"terraform",
+				"terraform-vars",
 				"typescript",
 				"typescriptreact",
 				"vue",
@@ -615,6 +619,8 @@ do
 					markdown = { prettier_d },
 					python = { ruff_lint, ruff_format },
 					sh = { shellcheck, shfmt },
+					terraform = { tf_fmt },
+					["terraform-vars"] = { tf_fmt },
 					typescript = { eslint_d, prettier_d },
 					typescriptreact = { eslint_d, prettier_d },
 					vue = { eslint_d, prettier_d },
@@ -678,5 +684,8 @@ end
 vim.filetype.add({
 	extension = {
 		gotmpl = "gotmpl",
+		-- Builtin detection returns "tf" (TinyFugue) for an empty .tf buffer,
+		-- so a freshly created file gets no terraform LSPs until reopened.
+		tf = "terraform",
 	},
 })
