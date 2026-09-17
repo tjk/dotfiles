@@ -122,6 +122,8 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 		"*.scss",
 		"*.sh",
 		"*.slang",
+		"*.tf",
+		"*.tfvars",
 		"*.ts",
 		"*.tsx",
 		"*.zsh",
@@ -275,9 +277,6 @@ miniclue.setup({
 
 require("nvim-autopairs").setup({})
 
-require("nvim-tree").setup({})
-map("n", "<leader>e", "<cmd>NvimTreeToggle<CR>")
-
 require("lualine").setup({})
 
 local setup_treesitter = function()
@@ -290,6 +289,7 @@ local setup_treesitter = function()
 		"cpp",
 		"css",
 		"go",
+		"hcl",
 		"html",
 		"javascript",
 		"json",
@@ -299,6 +299,7 @@ local setup_treesitter = function()
 		"rust",
 		"slang",
 		"svelte",
+		"terraform",
 		"typescript",
 		"vim",
 		"vimdoc",
@@ -327,6 +328,21 @@ local setup_treesitter = function()
 end
 setup_treesitter()
 
+require("nvim-tree").setup({
+	actions = {
+		open_file = {
+			window_picker = {
+				enable = false,
+			},
+		},
+	},
+})
+map("n", "<leader>e", function()
+	require("nvim-tree.api").tree.toggle({
+		focus = false,
+	})
+end)
+
 local fzf = require("fzf-lua")
 fzf.setup({
 	ui_select = {},
@@ -354,7 +370,10 @@ vim.api.nvim_create_autocmd("VimEnter", {
 			fzf.files()
 		end
 
-		require("nvim-tree.api").tree.open()
+		-- would like .open() but no focus = false
+		require("nvim-tree.api").tree.open({
+			focus = false,
+		})
 	end,
 })
 
@@ -628,6 +647,8 @@ do
 	})
 	lsp_enable("pyright")
 	lsp_enable("slangd")
+	lsp_enable("terraformls")
+	lsp_enable("tflint")
 	lsp_enable("ts_ls")
 	vim.g.rustaceanvim = {
 		server = {
