@@ -370,10 +370,9 @@ vim.api.nvim_create_autocmd("VimEnter", {
 			fzf.files()
 		end
 
-		-- would like .open() but no focus = false
-		require("nvim-tree.api").tree.open({
-			focus = false,
-		})
+		-- require("nvim-tree.api").tree.open({
+		-- 	focus = false,
+		-- })
 	end,
 })
 
@@ -412,7 +411,13 @@ map("n", "<leader>Q", fzf.diagnostics_workspace)
 -- end)
 
 require("mason").setup({})
-require("mason-lspconfig").setup({})
+require("mason-lspconfig").setup({
+	automatic_enable = {
+		exclude = {
+			"rust_analyzer",
+		},
+	},
+})
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = augroup,
 	callback = function(ev)
@@ -628,6 +633,14 @@ do
 				},
 			},
 		})
+		-- efm doesn't handle rust
+		vim.api.nvim_create_autocmd("BufWritePre", {
+			group = augroup,
+			pattern = "*.rs",
+			callback = function(args)
+				vim.lsp.buf.format({ bufnr = args.buf, timeout_ms = 2000 })
+			end,
+		})
 	end
 	lsp_enable("gopls")
 	lsp_enable("jsonls", {
@@ -659,6 +672,36 @@ do
 	vim.g.rustaceanvim = {
 		server = {
 			capabilities = capabilities,
+			on_attach = function(_, bufnr)
+				vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+				local o = { buffer = bufnr, silent = true }
+				map("n", "K", function()
+					vim.cmd.RustLsp({ "hover", "actions" })
+				end, o)
+				map("n", "<leader>ca", function()
+					vim.cmd.RustLsp("codeAction")
+				end, o)
+				map("n", "<leader>ee", function()
+					vim.cmd.RustLsp("explainError")
+				end, o)
+				map("n", "<leader>ed", function()
+					vim.cmd.RustLsp("renderDiagnostic")
+				end, o)
+				map("n", "<leader>em", function()
+					vim.cmd.RustLsp("expandMacro")
+				end, o)
+				map("n", "<leader>rr", function()
+					vim.cmd.RustLsp("runnables")
+				end, o)
+				map("n", "<leader>oc", function()
+					vim.cmd.RustLsp("openCargo")
+				end, o)
+			end,
+			default_settings = {
+				["rust-analyzer"] = {
+					check = { command = "clippy" },
+				},
+			},
 		},
 	}
 	lsp_enable("yamlls", {
